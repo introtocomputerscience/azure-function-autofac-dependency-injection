@@ -9,6 +9,7 @@ namespace AutofacDIExample.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<Greeter>().As<IGreeter>();
+            builder.RegisterType<Goodbyer>().As<IGoodbyer>();
         }
     }
 }

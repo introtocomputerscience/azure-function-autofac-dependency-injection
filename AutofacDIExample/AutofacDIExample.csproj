@@ -23,4 +23,7 @@
   <ItemGroup>
     <Folder Include="GreeterFunction\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzureFunctions.Autofac\AzureFunctions.Autofac.csproj" />
+  </ItemGroup>
 </Project>

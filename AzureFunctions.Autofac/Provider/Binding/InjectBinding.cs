@@ -1,31 +1,29 @@
-﻿using System;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Protocols;
+using System;
+using System.Threading.Tasks;
 
-namespace AutofacDIExample.DependencyInjection
+namespace AzureFunctions.Autofac
 {
     internal class InjectBinding : IBinding
     {
-        private IContainer container;
+        private IInjectResolver resolver;
         private Type type;
-
-        public InjectBinding(IContainer container, Type type)
+        public bool FromAttribute => true;
+        public InjectBinding(IInjectResolver resolver, Type type)
         {
-            this.container = container;
+            this.resolver = resolver;
             this.type = type;
         }
-
-        public bool FromAttribute => true;
 
         public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) =>
             Task.FromResult((IValueProvider)new InjectValueProvider(value));
 
         public async Task<IValueProvider> BindAsync(BindingContext context)
         {
-            await Task.Yield(); //Force Asynchronous Execution
-            var value = container.Resolve(this.type);
+            await Task.Yield();
+            dynamic value = resolver.Resolve(type);
             return await BindAsync(value, context.ValueContext);
         }
 

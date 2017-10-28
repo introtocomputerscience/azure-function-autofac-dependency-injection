@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>CJ van der Smissen</Authors>
+    <Company />
+    <Description>Autofac Implementation of DI for Azure Functions</Description>
+    <Copyright>2017</Copyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Version>1.1.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac">
+      <Version>4.6.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Azure.WebJobs">
+      <Version>2.1.0-beta4</Version>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

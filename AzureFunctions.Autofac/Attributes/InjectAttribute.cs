@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.WebJobs.Description;
 using System;
 
-namespace AutofacDIExample.DependencyInjection
+namespace AzureFunctions.Autofac
 {
     [Binding]
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
