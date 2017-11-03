@@ -30,7 +30,7 @@ Once you have created your config class you need to annotate your function class
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
                                               TraceWriter log, 
                                               [Inject]IGreeter greeter, 
-                                              [Inject()]IGoodbyer goodbye)
+                                              [Inject]IGoodbyer goodbye)
         {
             log.Info("C# HTTP trigger function processed a request.");
             return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
