@@ -5,7 +5,7 @@ An Autofac based implementation of Dependency Injection based on Boris Wilhelm's
 In order to implement the dependency injection you have to create a class to configure DependencyInjection and add an attribute on your function class.
 
 ### Configuration
-Create a class and call the DependencyInjection.Initialize method. Perform the registrations as you normally would with Autofac. You can register external modules or register inline.
+Create a class and call the DependencyInjection.Initialize method. Perform the registrations as you normally would with Autofac.
 ```c#
     public class DIConfig
     {
@@ -13,9 +13,15 @@ Create a class and call the DependencyInjection.Initialize method. Perform the r
         {
             DependencyInjection.Initialize(builder =>
             {
-                builder.RegisterModule(new TestModule());
+                //Implicity registration
                 builder.RegisterType<Sample>().As<ISample>();
+                //Explicit registration
                 builder.Register<Example>(c => new Example(c.Resolve<ISample>())).As<IExample>();
+                //Registration by autofac module
+                builder.RegisterModule(new TestModule());
+                //Named Instances are supported
+                builder.RegisterType<Thing1>().Named<IThing>("OptionA");
+                builder.RegisterType<Thing2>().Named<IThing>("OptionB");
             });
         }
     }
@@ -37,7 +43,7 @@ Once you have created your config class you need to annotate your function class
         }
     }
 ```
-### Named Dependencies
+### Using Named Dependencies
 Support has been added to use named dependencies. Simple add a name parameter to the Inject attribute to specify which instance to use.
 ```c#
     [DependencyInjectionConfig(typeof(DIConfig))]
