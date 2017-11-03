@@ -1,4 +1,4 @@
-﻿namespace AutofacDIExample.Interfaces
+﻿namespace AutofacDIExample
 {
     public interface IGreeter
     {

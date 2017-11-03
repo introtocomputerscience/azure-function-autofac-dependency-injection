@@ -1,4 +1,3 @@
-using AutofacDIExample.Interfaces;
 using AutofacDIExample.Resolvers;
 using AzureFunctions.Autofac;
 using Microsoft.Azure.WebJobs;
@@ -9,14 +8,18 @@ using System.Net.Http;
 
 namespace AutofacDIExample.GreeterFunction
 {
+    [DependencyInjectionConfig(typeof(DIConfig))]
     public class GreeterFunction
     {
-        [InjectResolver(typeof(AutofacResolver))]
         [FunctionName("GreeterFunction")]
-        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, TraceWriter log, [Inject]IGreeter greeter, [Inject]IGoodbyer goodbye)
+        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
+                                              TraceWriter log, 
+                                              [Inject]IGreeter greeter, 
+                                              [Inject("Main")]IGoodbyer goodbye, 
+                                              [Inject("Secondary")]IGoodbyer alternateGoodbye)
         {
             log.Info("C# HTTP trigger function processed a request.");
-            return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
+            return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()} or {alternateGoodbye.Goodbye()}");
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using AutofacDIExample.Interfaces;
 using AutofacDIExample.Models;
 
 namespace AutofacDIExample.Modules
@@ -9,7 +8,9 @@ namespace AutofacDIExample.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<Greeter>().As<IGreeter>();
-            builder.RegisterType<Goodbyer>().As<IGoodbyer>();
+            builder.RegisterType<Goodbyer>().Named<IGoodbyer>("Main");
+            builder.RegisterType<AlternateGoodbyer>().Named<IGoodbyer>("Secondary");
+
         }
     }
 }

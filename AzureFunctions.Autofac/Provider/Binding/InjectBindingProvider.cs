@@ -1,21 +1,24 @@
-﻿using Autofac;
+﻿using AzureFunctions.Autofac.Exceptions;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using System;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace AzureFunctions.Autofac
 {
     public class InjectBindingProvider : IBindingProvider
     {
         public Task<IBinding> TryCreateAsync(BindingProviderContext context) {
-            //Get the resolver
+            //Get the resolver starting with method then class
             MethodInfo method = context.Parameter.Member as MethodInfo;
-            InjectResolverAttribute attribute = method.GetCustomAttribute<InjectResolverAttribute>();
-            IInjectResolver resolver = (IInjectResolver)Activator.CreateInstance(attribute.Resolver);
+            DependencyInjectionConfigAttribute attribute = method.DeclaringType.GetCustomAttribute<DependencyInjectionConfigAttribute>();
+            if(attribute == null) { throw new MissingAttributeException(); } 
+            //Initialize DependencyInjection
+            Activator.CreateInstance(attribute.Config);
+            //Check if there is a name property
+            InjectAttribute injectAttribute = context.Parameter.GetCustomAttribute<InjectAttribute>();
             //This resolves the binding
-            IBinding binding = new InjectBinding(resolver, context.Parameter.ParameterType);
+            IBinding binding = new InjectBinding(context.Parameter.ParameterType, injectAttribute.Name);
             return Task.FromResult(binding);
         }
     }

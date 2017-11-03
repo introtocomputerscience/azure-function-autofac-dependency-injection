@@ -1,6 +1,4 @@
-﻿using AutofacDIExample.Interfaces;
-
-namespace AutofacDIExample.Models
+﻿namespace AutofacDIExample
 {
     public class Greeter : IGreeter
     {

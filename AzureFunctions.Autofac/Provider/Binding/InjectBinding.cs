@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using AzureFunctions.Autofac.Configuration;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Protocols;
 using System;
@@ -8,13 +9,14 @@ namespace AzureFunctions.Autofac
 {
     internal class InjectBinding : IBinding
     {
-        private IInjectResolver resolver;
         private Type type;
+        private string name;
+
         public bool FromAttribute => true;
-        public InjectBinding(IInjectResolver resolver, Type type)
+        public InjectBinding(Type type, String name)
         {
-            this.resolver = resolver;
             this.type = type;
+            this.name = name;
         }
 
         public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) =>
@@ -23,7 +25,7 @@ namespace AzureFunctions.Autofac
         public async Task<IValueProvider> BindAsync(BindingContext context)
         {
             await Task.Yield();
-            dynamic value = resolver.Resolve(type);
+            dynamic value = DependencyInjection.Resolve(type, name);
             return await BindAsync(value, context.ValueContext);
         }
 
