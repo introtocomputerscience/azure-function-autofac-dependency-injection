@@ -8,7 +8,12 @@
     <Description>Autofac Implementation of DI for Azure Functions</Description>
     <Copyright>2017</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <Version>1.1.0</Version>
+    <Version>2.0.0</Version>
+    <PackageProjectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageReleaseNotes>Changed configuration method to be simplified.
+Added support for named instances in autofac.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
