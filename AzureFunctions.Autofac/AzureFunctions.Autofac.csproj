@@ -1,19 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>net461;net462</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>CJ van der Smissen</Authors>
     <Company />
     <Description>Autofac Implementation of DI for Azure Functions</Description>
     <Copyright>2017</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <PackageProjectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</PackageProjectUrl>
     <RepositoryUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Changed configuration method to be simplified.
-Added support for named instances in autofac.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated packages to work with latest Azure Functions</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +20,7 @@ Added support for named instances in autofac.</PackageReleaseNotes>
       <Version>4.6.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Azure.WebJobs">
-      <Version>2.1.0-beta4</Version>
+      <Version>2.2.0</Version>
     </PackageReference>
   </ItemGroup>
 
