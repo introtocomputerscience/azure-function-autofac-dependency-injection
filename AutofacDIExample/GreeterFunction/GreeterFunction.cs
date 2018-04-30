@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using System.Net;
 using System.Net.Http;
+using AzureFunctions.Autofac.Attributes;
 
 namespace AutofacDIExample.GreeterFunction
 {
