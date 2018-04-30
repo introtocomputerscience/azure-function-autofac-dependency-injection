@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.Azure.WebJobs.Description;
+﻿using Microsoft.Azure.WebJobs.Description;
+using System;
 
-namespace AzureFunctions.Autofac.Attributes
+namespace AzureFunctions.Autofac
 {
     [Binding]
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]

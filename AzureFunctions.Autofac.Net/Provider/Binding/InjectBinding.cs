@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Autofac;
 using AzureFunctions.Autofac.Configuration;
-using AzureFunctions.Autofac.Provider.Value;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Protocols;
+using System;
+using System.Threading.Tasks;
 
-namespace AzureFunctions.Autofac.Provider.Binding
+namespace AzureFunctions.Autofac
 {
     internal class InjectBinding : IBinding
     {

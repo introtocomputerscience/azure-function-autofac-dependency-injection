@@ -1,11 +1,10 @@
-﻿using System;
+﻿using AzureFunctions.Autofac.Exceptions;
+using Microsoft.Azure.WebJobs.Host.Bindings;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using AzureFunctions.Autofac.Attributes;
-using AzureFunctions.Autofac.Exceptions;
-using Microsoft.Azure.WebJobs.Host.Bindings;
 
-namespace AzureFunctions.Autofac.Provider.Binding
+namespace AzureFunctions.Autofac
 {
     public class InjectBindingProvider : IBindingProvider
     {
