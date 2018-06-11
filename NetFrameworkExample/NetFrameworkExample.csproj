@@ -1,12 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>    
-    <PackageReference Include="Autofac">
-      <Version>4.6.2</Version>
-    </PackageReference>    
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.13" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzureFunctions.Autofac\AzureFunctions.Autofac.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -19,11 +19,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GreeterFunction\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AzureFunctions.Autofac\AzureFunctions.Autofac.csproj" />
   </ItemGroup>
 </Project>
