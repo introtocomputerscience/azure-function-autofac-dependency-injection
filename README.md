@@ -5,11 +5,11 @@ An Autofac based implementation of Dependency Injection based on Boris Wilhelm's
 In order to implement the dependency injection you have to create a class to configure DependencyInjection and add an attribute on your function class.
 
 ### Configuration
-Create a class and call the DependencyInjection.Initialize method. Perform the registrations as you normally would with Autofac.
+Create a class and add a constructor that takes 1 string argument. The string argument will automatically be passed and runtime and simply needs to be passed through to the initialize method. In the constructor call the DependencyInjection.Initialize method. Perform the registrations as you normally would with Autofac.
 ```c#
     public class DIConfig
     {
-        public DIConfig()
+        public DIConfig(string functionName)
         {
             DependencyInjection.Initialize(builder =>
             {
@@ -22,7 +22,7 @@ Create a class and call the DependencyInjection.Initialize method. Perform the r
                 //Named Instances are supported
                 builder.RegisterType<Thing1>().Named<IThing>("OptionA");
                 builder.RegisterType<Thing2>().Named<IThing>("OptionB");
-            });
+            }, functionName);
         }
     }
 ```
@@ -58,6 +58,37 @@ Support has been added to use named dependencies. Simple add a name parameter to
         {
             log.Info("C# HTTP trigger function processed a request.");
             return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()} or {alternateGoodbye.Goodbye()}");
+        }
+    }
+```
+### Multiple Dependency Injection Configurations
+In some cases you may wish to have different dependency injection configs for different classes. This is supported by simply annotating the other class with a different dependency injection config.
+```c#
+    [DependencyInjectionConfig(typeof(DIConfig))]
+    public class GreeterFunction
+    {
+        [FunctionName("GreeterFunction")]
+        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
+                                              TraceWriter log, 
+                                              [Inject]IGreeter greeter, 
+                                              [Inject]IGoodbyer goodbye)
+        {
+            log.Info("C# HTTP trigger function processed a request.");
+            return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
+        }
+    }
+
+    [DependencyInjectionConfig(typeof(SecondaryConfig))]
+    public class SecondaryGreeterFunction
+    {
+        [FunctionName("SecondaryGreeterFunction")]
+        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
+                                              TraceWriter log, 
+                                              [Inject]IGreeter greeter, 
+                                              [Inject]IGoodbyer goodbye)
+        {
+            log.Info("C# HTTP trigger function processed a request.");
+            return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
         }
     }
 ```
