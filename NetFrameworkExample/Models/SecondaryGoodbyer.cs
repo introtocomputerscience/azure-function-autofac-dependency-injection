@@ -1,10 +1,10 @@
 ﻿namespace AutofacDIExample.Models
 {
-    public class AlternateGoodbyer : IGoodbyer
+    public class SecondaryGoodbyer : IGoodbyer
     {
         public string Goodbye()
         {
-            return "Farewell!";
+            return "Bye bye now!";
         }
     }
 }

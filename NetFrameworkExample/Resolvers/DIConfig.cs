@@ -9,12 +9,12 @@ namespace AutofacDIExample.Resolvers
 {
     public class DIConfig
     {
-        public DIConfig()
+        public DIConfig(string functionName)
         {
             DependencyInjection.Initialize(builder =>
             {
                 builder.RegisterModule(new TestModule());
-            });
+            }, functionName);
         }
     }
 }
