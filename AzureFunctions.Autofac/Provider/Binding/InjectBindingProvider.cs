@@ -18,7 +18,7 @@ namespace AzureFunctions.Autofac
             //Check if there is a name property
             InjectAttribute injectAttribute = context.Parameter.GetCustomAttribute<InjectAttribute>();
             //This resolves the binding
-            IBinding binding = new InjectBinding(context.Parameter.ParameterType, injectAttribute.Name);
+            IBinding binding = new InjectBinding(context.Parameter.ParameterType, injectAttribute.Name, method.DeclaringType.Name);
             return Task.FromResult(binding);
         }
     }

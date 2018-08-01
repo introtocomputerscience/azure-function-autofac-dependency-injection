@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27019.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetStandard", "NetStandard", "{955B5FA4-C951-4FEE-898A-F2A319BEEE31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions.Autofac", "AzureFunctions.Autofac\AzureFunctions.Autofac.csproj", "{1807691A-3F7E-4774-9B1D-E6B4A8FBFB3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctions.Autofac", "AzureFunctions.Autofac\AzureFunctions.Autofac.csproj", "{1807691A-3F7E-4774-9B1D-E6B4A8FBFB3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFrameworkExample", "NetFrameworkExample\NetFrameworkExample.csproj", "{11D9EEF4-2958-453D-A91F-D4C5FF184814}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFrameworkExample", "NetFrameworkExample\NetFrameworkExample.csproj", "{11D9EEF4-2958-453D-A91F-D4C5FF184814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreExample", "NetCoreExample\NetCoreExample.csproj", "{0D091FB6-64C9-4B85-848C-A91A4BF70651}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreExample", "NetCoreExample\NetCoreExample.csproj", "{0D091FB6-64C9-4B85-848C-A91A4BF70651}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DurableFunctionsNetFrameworkExample", "DurableFunctionsNetFrameworkExample\DurableFunctionsNetFrameworkExample.csproj", "{136FEDCE-1B24-4EE0-A9C5-26A225FB1545}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DurableFunctionsNetFrameworkExample.Tests", "DurableFunctionsNetFrameworkExample.Tests\DurableFunctionsNetFrameworkExample.Tests.csproj", "{4EDA88C8-8F59-4255-878F-E1542FA822C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,14 @@ Global
 		{0D091FB6-64C9-4B85-848C-A91A4BF70651}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D091FB6-64C9-4B85-848C-A91A4BF70651}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D091FB6-64C9-4B85-848C-A91A4BF70651}.Release|Any CPU.Build.0 = Release|Any CPU
+		{136FEDCE-1B24-4EE0-A9C5-26A225FB1545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{136FEDCE-1B24-4EE0-A9C5-26A225FB1545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{136FEDCE-1B24-4EE0-A9C5-26A225FB1545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{136FEDCE-1B24-4EE0-A9C5-26A225FB1545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EDA88C8-8F59-4255-878F-E1542FA822C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EDA88C8-8F59-4255-878F-E1542FA822C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EDA88C8-8F59-4255-878F-E1542FA822C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EDA88C8-8F59-4255-878F-E1542FA822C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

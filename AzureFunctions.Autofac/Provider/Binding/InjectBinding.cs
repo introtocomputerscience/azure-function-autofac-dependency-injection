@@ -12,12 +12,13 @@ namespace AzureFunctions.Autofac
     {
         private Type type;
         private string name;
-
+        private string className;
         public bool FromAttribute => true;
-        public InjectBinding(Type type, String name)
+        public InjectBinding(Type type, String name, String className)
         {
             this.type = type;
             this.name = name;
+            this.className = className;
         }
 
         public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) =>
@@ -25,10 +26,7 @@ namespace AzureFunctions.Autofac
 
         public async Task<IValueProvider> BindAsync(BindingContext context)
         {
-            await Task.Yield();
-            dynamic bindingData = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(context.BindingData["sys"]));
-            var methodName = bindingData?.MethodName?.Value;
-            dynamic value = DependencyInjection.Resolve(type, name, methodName);
+            dynamic value = DependencyInjection.Resolve(type, name, this.className);
             return await BindAsync(value, context.ValueContext);
         }
 
