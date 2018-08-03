@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.2-beta</Version>
+    <Version>3.0.2</Version>
     <Authors>CJ van der Smissen</Authors>
     <Company />
     <Product />
@@ -12,7 +12,8 @@
     <PackageProjectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</PackageProjectUrl>
     <RepositoryUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Fixed a bug that was causing DI resolution to fail when class name and function name did not match</PackageReleaseNotes>
+    <PackageReleaseNotes>Forced Autofac 4.2.1 as a dependency due to Azure Functions requiring that version
+Fixed a bug that was causing DI resolution to fail when class name and function name did not match</PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/LICENSE</PackageLicenseUrl>
     <AssemblyVersion>3.0.2.0</AssemblyVersion>
   </PropertyGroup>
@@ -25,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.2.1" />
+    <PackageReference Include="Autofac" Version="[4.2.1]" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
   </ItemGroup>
 
