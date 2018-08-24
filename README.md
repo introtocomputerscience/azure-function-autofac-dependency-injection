@@ -92,3 +92,37 @@ In some cases you may wish to have different dependency injection configs for di
         }
     }
 ```
+## Verifying dependency injection configuration
+Dependency injection is a great tool for creating unit tests. But with manual configuration of the dependency injection, there is a risk of mis-configuration that will not show up in unit tests. For this purpose, there is the `DependencyInjection.VerifyConfiguration` method.
+
+<aside class="notice">
+It is not recommended to call `VerifyConfiguration` unless done so in a test-scenario.
+</aside>
+
+`VerifyConfiguration` verifies the following rules:
+1. That an `InjectAttribute` is preceeded by a `DependencyInjectionConfigAttribute`.
+2. That the configuration can be instantiated.
+3. That all injected dependencies in the given type can be resolved with the defined configuration.
+4. Optionally that no redundant configurations exist, i.e. a `DependencyInjectionConfigAttribute` with no corresponding `InjectAttribute`.
+### Simple example of verification
+Below is a very simple example of verifying the dependency injection configuration for a specific class:
+```c#
+    DependencyInjection.VerifyConfiguration(typeof(MyCustomClassThatUsesDependencyInjection));
+```
+### Ignoring redundant configurations
+If you don't want to verify rule 4, pass in `false` as the second parameter to `VerifyConfiguration`:
+```c#
+    DependencyInjection.VerifyConfiguration(typeof(MyCustomClassThatUsesDependencyInjection, false));
+```
+### Example unit test to verify an entire project/assembly
+For instance, you can use it in a unit test to verify that all classes in your project has dependency injection set up correctly:
+```c#
+    [TestMethod]
+    public void TestDependencyInjectionConfigurationInAssembly() {
+        var assembly = typeof(SomeClassInYouProject).Assembly;
+        var types = assembly.GetTypes();
+        foreach (var type in types) {
+            DependencyInjection.VerifyConfiguration(type);
+        }
+    }
+```
