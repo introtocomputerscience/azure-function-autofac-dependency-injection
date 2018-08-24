@@ -95,9 +95,7 @@ In some cases you may wish to have different dependency injection configs for di
 ## Verifying dependency injection configuration
 Dependency injection is a great tool for creating unit tests. But with manual configuration of the dependency injection, there is a risk of mis-configuration that will not show up in unit tests. For this purpose, there is the `DependencyInjection.VerifyConfiguration` method.
 
-<aside class="notice">
 It is not recommended to call `VerifyConfiguration` unless done so in a test-scenario.
-</aside>
 
 `VerifyConfiguration` verifies the following rules:
 1. That an `InjectAttribute` is preceeded by a `DependencyInjectionConfigAttribute`.
