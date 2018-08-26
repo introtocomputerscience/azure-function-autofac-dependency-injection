@@ -1,6 +1,9 @@
 # Autofac Dependency Injection in Azure Functions
 An Autofac based implementation of Dependency Injection based on Boris Wilhelm's [azure-function-dependency-injection](https://github.com/BorisWilhelms/azure-function-dependency-injection) and Scott Holden's [WebJobs.ContextResolver](https://github.com/ScottHolden/WebJobs.ContextResolver) available on NuGet as [AzureFunctions.Autofac](https://www.nuget.org/packages/AzureFunctions.Autofac)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/d6k6g4gbhulqneef?svg=true)](https://ci.appveyor.com/project/vandersmissenc/azure-function-autofac-dependency-injection)
+
+
 ## Usage
 In order to implement the dependency injection you have to create a class to configure DependencyInjection and add an attribute on your function class.
 
@@ -92,6 +95,7 @@ In some cases you may wish to have different dependency injection configs for di
         }
     }
 ```
+
 ## Verifying dependency injection configuration
 Dependency injection is a great tool for creating unit tests. But with manual configuration of the dependency injection, there is a risk of mis-configuration that will not show up in unit tests. For this purpose, there is the `DependencyInjection.VerifyConfiguration` method.
 
