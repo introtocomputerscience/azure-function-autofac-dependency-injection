@@ -114,7 +114,7 @@ Below is a very simple example of verifying the dependency injection configurati
 ### Ignoring redundant configurations
 If you don't want to verify rule 4, pass in `false` as the second parameter to `VerifyConfiguration`:
 ```c#
-    DependencyInjection.VerifyConfiguration(typeof(MyCustomClassThatUsesDependencyInjection, false));
+    DependencyInjection.VerifyConfiguration(typeof(MyCustomClassThatUsesDependencyInjection), false);
 ```
 ### Example unit test to verify an entire project/assembly
 For instance, you can use it in a unit test to verify that all classes in your project has dependency injection set up correctly:
