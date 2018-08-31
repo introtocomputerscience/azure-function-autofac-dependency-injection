@@ -9,6 +9,10 @@ namespace AzureFunctions.Autofac
     public class InjectBindingProvider : IBindingProvider
     {
         public Task<IBinding> TryCreateAsync(BindingProviderContext context) {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             //Get the resolver starting with method then class
             MethodInfo method = context.Parameter.Member as MethodInfo;
             DependencyInjectionConfigAttribute attribute = method.DeclaringType.GetCustomAttribute<DependencyInjectionConfigAttribute>();
