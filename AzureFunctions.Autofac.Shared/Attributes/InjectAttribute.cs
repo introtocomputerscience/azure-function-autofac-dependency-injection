@@ -1,10 +1,10 @@
-﻿using Microsoft.Azure.WebJobs.Description;
-using System;
+﻿using System;
+using Microsoft.Azure.WebJobs.Description;
 
 namespace AzureFunctions.Autofac
 {
     [Binding]
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
     public class InjectAttribute : Attribute
     {
         public String Name { get; }

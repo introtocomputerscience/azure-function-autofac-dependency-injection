@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27019.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions.Autofac", "AzureFunctions.Autofac\AzureFunctions.Autofac.csproj", "{1807691A-3F7E-4774-9B1D-E6B4A8FBFB3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions.Autofac.Shared", "AzureFunctions.Autofac.Shared\AzureFunctions.Autofac.Shared.csproj", "{1807691A-3F7E-4774-9B1D-E6B4A8FBFB3F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetFrameworkExample", "NetFrameworkExample\NetFrameworkExample.csproj", "{11D9EEF4-2958-453D-A91F-D4C5FF184814}"
 EndProject
@@ -13,7 +13,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DurableFunctionsNetFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DurableFunctionsNetFrameworkExample.Tests", "DurableFunctionsNetFrameworkExample.Tests\DurableFunctionsNetFrameworkExample.Tests.csproj", "{4EDA88C8-8F59-4255-878F-E1542FA822C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctions.Autofac.Tests", "AzureFunctions.Autofac.Tests\AzureFunctions.Autofac.Tests.csproj", "{85A4F53C-D31E-40E1-A4BB-C16DB2C2B939}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions.Autofac.NetStandard", "AzureFunctions.Autofac.NetStandard\AzureFunctions.Autofac.NetStandard.csproj", "{EFE54072-60B6-4B6D-8B76-8DFD9BE40505}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctions.Autofac.NetFramework", "AzureFunctions.Autofac.NetFramework\AzureFunctions.Autofac.NetFramework.csproj", "{3F3D335B-7A36-4698-9C5D-69E225E625CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctions.Autofac.NetFramework.Tests", "AzureFunctions.Autofac.NetFramework.Tests\AzureFunctions.Autofac.NetFramework.Tests.csproj", "{1E54AD30-5D44-47A3-AF06-125F7421A6E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions.Autofac.NetStandard.Tests", "AzureFunctions.Autofac.NetStandard.Tests\AzureFunctions.Autofac.NetStandard.Tests.csproj", "{EB9F7057-22D3-4B17-AF36-92E1724EBEDE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{99A3CD31-8758-4674-BF9A-F6EC5588D10F}"
+	ProjectSection(SolutionItems) = preProject
+		AzureFunctions.Autofac.nuspec = AzureFunctions.Autofac.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +52,22 @@ Global
 		{4EDA88C8-8F59-4255-878F-E1542FA822C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EDA88C8-8F59-4255-878F-E1542FA822C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EDA88C8-8F59-4255-878F-E1542FA822C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85A4F53C-D31E-40E1-A4BB-C16DB2C2B939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85A4F53C-D31E-40E1-A4BB-C16DB2C2B939}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85A4F53C-D31E-40E1-A4BB-C16DB2C2B939}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85A4F53C-D31E-40E1-A4BB-C16DB2C2B939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFE54072-60B6-4B6D-8B76-8DFD9BE40505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFE54072-60B6-4B6D-8B76-8DFD9BE40505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFE54072-60B6-4B6D-8B76-8DFD9BE40505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFE54072-60B6-4B6D-8B76-8DFD9BE40505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F3D335B-7A36-4698-9C5D-69E225E625CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F3D335B-7A36-4698-9C5D-69E225E625CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F3D335B-7A36-4698-9C5D-69E225E625CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F3D335B-7A36-4698-9C5D-69E225E625CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E54AD30-5D44-47A3-AF06-125F7421A6E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E54AD30-5D44-47A3-AF06-125F7421A6E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E54AD30-5D44-47A3-AF06-125F7421A6E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E54AD30-5D44-47A3-AF06-125F7421A6E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB9F7057-22D3-4B17-AF36-92E1724EBEDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB9F7057-22D3-4B17-AF36-92E1724EBEDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB9F7057-22D3-4B17-AF36-92E1724EBEDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB9F7057-22D3-4B17-AF36-92E1724EBEDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

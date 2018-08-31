@@ -2,9 +2,7 @@
 using AzureFunctions.Autofac.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace AzureFunctions.Autofac.Configuration
 {

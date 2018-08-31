@@ -4,46 +4,46 @@ using AzureFunctions.Autofac.Configuration;
 using AzureFunctions.Autofac.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AzureFunctions.Autofac.Tests
+namespace AzureFunctions.Autofac.NetStandard.Tests
 {
     [TestClass]
-    public class DependencyInjectionVerificationTest
+    public class DependencyInjectionVerificationTests
     {
         [TestMethod]
-        public void TestCorrectConfiguration()
+        public void VerifyConfiguration_Should_PassSuccessfully_When_CorrectConfiguration()
         {
             DependencyInjection.VerifyConfiguration(typeof(FunctionWithCorrectConfiguration));
         }
 
         [TestMethod]
-        public void TestIncorrectConfiguration()
+        public void VerifyConfiguration_Should_ThrowException_When_IncorrectConfiguration()
         {
             Assert.ThrowsException<DependencyResolutionException>(() =>
                 DependencyInjection.VerifyConfiguration(typeof(FunctionWithIncorrectConfiguration)));
         }
 
         [TestMethod]
-        public void TestMissingConfiguration()
+        public void VerifyConfiguration_Should_ThrowException_When_MisingConfiguration()
         {
             Assert.ThrowsException<MissingAttributeException>(() =>
                 DependencyInjection.VerifyConfiguration(typeof(FunctionWithInjectionButNoConfiguration)));
         }
 
         [TestMethod]
-        public void TestMissingInjection()
+        public void VerifyConfiguration_Should_ThrowException_When_MisingInjectAttribute()
         {
             Assert.ThrowsException<MissingAttributeException>(() =>
                 DependencyInjection.VerifyConfiguration(typeof(FunctionWithConfigurationButNoInjection)));
         }
 
         [TestMethod]
-        public void TestMissingInjectionCanBeIgnored()
+        public void VerifyConfiguration_Should_Pass_When_NotRequiringAMatchingAttribute()
         {
             DependencyInjection.VerifyConfiguration(typeof(FunctionWithConfigurationButNoInjection), false);
         }
 
         [TestMethod]
-        public void TestTypeWithNeitherConfigurationNorInjection()
+        public void VerifyConfiguration_Should_Pass_When_NoConfigurationOrAttributes()
         {
             DependencyInjection.VerifyConfiguration(typeof(FunctionWithNeitherConfigurationNorInjection));
         }
@@ -65,10 +65,10 @@ namespace AzureFunctions.Autofac.Tests
             public CorrectConfigurationExample(string functionName)
             {
                 DependencyInjection.Initialize(builder =>
-                    {
-                        builder.RegisterType<DependentImplementation>().As<IInterface1>();
-                        builder.RegisterType<DependeeImplementation>().As<IInterface2>();
-                    }, functionName);
+                {
+                    builder.RegisterType<DependentImplementation>().As<IInterface1>();
+                    builder.RegisterType<DependeeImplementation>().As<IInterface2>();
+                }, functionName);
             }
         }
 

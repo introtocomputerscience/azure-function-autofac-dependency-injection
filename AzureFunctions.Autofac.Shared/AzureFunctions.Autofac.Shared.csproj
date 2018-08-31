@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>3.0.3</Version>
     <Authors>CJ van der Smissen</Authors>
     <Company />
@@ -18,8 +18,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Attributes\" />
-    <Folder Include="Configurations\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Provider\" />
   </ItemGroup>
@@ -34,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.0-beta5" />
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.0-beta8" />
   </ItemGroup>
   
 </Project>

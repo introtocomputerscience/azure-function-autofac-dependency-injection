@@ -26,6 +26,10 @@ namespace AzureFunctions.Autofac
 
         public async Task<IValueProvider> BindAsync(BindingContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
             dynamic value = DependencyInjection.Resolve(type, name, this.className);
             return await BindAsync(value, context.ValueContext);
         }
