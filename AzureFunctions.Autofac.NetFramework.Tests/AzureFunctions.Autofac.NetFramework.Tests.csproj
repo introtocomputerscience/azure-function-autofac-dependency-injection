@@ -60,7 +60,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup> 
     <ProjectReference Include="..\AzureFunctions.Autofac.NetFramework\AzureFunctions.Autofac.NetFramework.csproj">
       <Project>{3f3d335b-7a36-4698-9c5d-69e225e625cb}</Project>
       <Name>AzureFunctions.Autofac.NetFramework</Name>
