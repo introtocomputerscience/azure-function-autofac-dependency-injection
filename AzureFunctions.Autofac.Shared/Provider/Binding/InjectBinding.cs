@@ -24,14 +24,17 @@ namespace AzureFunctions.Autofac
         public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) =>
             Task.FromResult((IValueProvider)new InjectValueProvider(value));
 
-        public async Task<IValueProvider> BindAsync(BindingContext context)
+        public Task<IValueProvider> BindAsync(BindingContext context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            dynamic value = DependencyInjection.Resolve(type, name, this.className);
-            return await BindAsync(value, context.ValueContext);
+            var value = DependencyInjection.Resolve(type, name, this.className);
+            
+            // async/await not required here because there is no continuation
+            // Simply returning the task result is better for perf because a state machine for the member is not compiled into the binary
+            return BindAsync(value, context.ValueContext);
         }
 
         public ParameterDescriptor ToParameterDescriptor() => new ParameterDescriptor();

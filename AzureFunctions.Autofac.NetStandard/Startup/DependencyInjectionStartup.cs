@@ -11,7 +11,9 @@ namespace AzureFunctions.Autofac.Startup
     {
         public void Configure(IWebJobsBuilder builder)
         {
-            builder.AddExtension(new InjectExtensionConfigProvider());
+            var provider = new InjectExtensionConfigProvider(builder.Services);
+
+            builder.AddExtension(provider);
         }
     }
 }
