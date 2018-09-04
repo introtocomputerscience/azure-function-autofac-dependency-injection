@@ -1,25 +1,35 @@
-﻿using AzureFunctions.Autofac.Exceptions;
-using Microsoft.Azure.WebJobs.Host.Bindings;
-using System;
-using System.Reflection;
-using System.Threading.Tasks;
-#if !NET46
+﻿#if !NET46
 using Microsoft.Extensions.DependencyInjection;
+using Autofac.Extensions.DependencyInjection;
 #endif
+using Autofac;
 
 namespace AzureFunctions.Autofac
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AzureFunctions.Autofac.Exceptions;
+    using Microsoft.Azure.WebJobs.Host.Bindings;
+    using Module = global::Autofac.Module;
+
     public class InjectBindingProvider : IBindingProvider
     {
+        private readonly IDictionary<Type, IContainer> cache = new Dictionary<Type, IContainer>();
+        private readonly ReaderWriterLockSlim syncLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        
         public InjectBindingProvider()
         {
         }
+
 #if !NET46
-        private readonly IServiceCollection _services;
+        private readonly IServiceCollection services;
 
         public InjectBindingProvider(IServiceCollection services)
         {
-            _services = services ?? throw new ArgumentNullException(nameof(services));
+            this.services = services ?? throw new ArgumentNullException(nameof(services));
         }
 #endif
 
@@ -27,30 +37,106 @@ namespace AzureFunctions.Autofac
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
-            //Get the resolver starting with method then class
-            MethodInfo method = context.Parameter.Member as MethodInfo;
-            DependencyInjectionConfigAttribute attribute = method.DeclaringType.GetCustomAttribute<DependencyInjectionConfigAttribute>();
-            if (attribute == null) { throw new MissingAttributeException(); }
 
-            var functionClassName = method.DeclaringType.Name;
-            
-            // TODO: Replace this constructor call with a wrapper around container construction
-            // treating the attribute target type as an Autofac module 
-            //Initialize DependencyInjection
-            Activator.CreateInstance(attribute.Config, new Object[] { functionClassName });
-            
+            //Get the resolver starting with method then class
+            var method = (MethodInfo)context.Parameter.Member;
+            var attribute = method.DeclaringType.GetCustomAttribute<DependencyInjectionConfigAttribute>();
+
+            if (attribute == null)
+            {
+                throw new MissingAttributeException();
+            }
+
+            var container = GetContainer(method.DeclaringType, attribute);
+
             // At this point we should have created a container for the function if it hasn't already been created
             // This provider should have access to that container and provide it to the InjectBinding instance
             // Need to prove that this provider is not created more than once per instance of a function or call of a function
             // This means that we don't want it to be created too often
-            
+
             //Check if there is a name property
-            InjectAttribute injectAttribute = context.Parameter.GetCustomAttribute<InjectAttribute>();
+            var injectAttribute = context.Parameter.GetCustomAttribute<InjectAttribute>();
+
             //This resolves the binding
-            IBinding binding = new InjectBinding(context.Parameter.ParameterType, injectAttribute.Name, functionClassName);
+            IBinding binding =
+                new InjectBinding(container, context.Parameter.ParameterType, injectAttribute.Name);
+
             return Task.FromResult(binding);
+        }
+
+        private IContainer GetContainer(Type functionType, DependencyInjectionConfigAttribute attribute)
+        {
+            // Determine whether the container has already been created for the owning function class
+            // We need a lock around this just in case this ends up being resolved in parallel for the parameters of a function method
+            // Reads on the lock should far exceed writes so a ReaderWriterLockSlim is better than a lock statement
+            syncLock.EnterUpgradeableReadLock();
+
+            if (cache.ContainsKey(functionType))
+            {
+                syncLock.ExitUpgradeableReadLock();
+
+                return cache[functionType];
+            }
+
+            syncLock.EnterWriteLock();
+            
+            try
+            {
+                if (cache.ContainsKey(functionType))
+                {
+                    return cache[functionType];
+                }
+
+                var container = BuildContainer(attribute);
+
+                cache[functionType] = container;
+
+                return container;
+            }
+            finally
+            {
+                syncLock.ExitWriteLock();
+            }
+        }
+
+        private IContainer BuildContainer(DependencyInjectionConfigAttribute attribute)
+        {
+            var builder = new ContainerBuilder();
+
+#if !NET46
+            if (services != null)
+            {
+                builder.Populate(services);
+            }
+#endif
+
+            // Use this next section to support the user configuration with a constructor that takes ContainerBuilder
+            // _________________________________________________________________________________________________
+
+            //var builderConstructor = attribute.Config.GetConstructor(new[] {typeof(ContainerBuilder)});
+
+            //if (builderConstructor == null)
+            //{
+            //    throw new MissingMemberException(
+            //        $"The {attribute.Config.FullName} class must provide a constructor that has a single parameter of type {typeof(ContainerBuilder).FullName}.");
+            //}
+
+            //Activator.CreateInstance(attribute.Config, builder);
+            // _________________________________________________________________________________________________
+
+            if (attribute.Config.IsAssignableTo<Module>() == false)
+            {
+                throw new InvalidOperationException(
+                    $"The {attribute.Config.FullName} class must inherit from {typeof(Module).FullName} and provide a default constructor.");
+            }
+
+            var userModule = (Module)Activator.CreateInstance(attribute.Config);
+            
+            builder.RegisterModule(userModule);
+
+            return builder.Build();
         }
     }
 }
