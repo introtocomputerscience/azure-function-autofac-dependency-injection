@@ -7,9 +7,8 @@ using Autofac;
 namespace AzureFunctions.Autofac
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Reflection;
-    using System.Threading;
     using System.Threading.Tasks;
     using AzureFunctions.Autofac.Exceptions;
     using Microsoft.Azure.WebJobs.Host.Bindings;
@@ -17,8 +16,7 @@ namespace AzureFunctions.Autofac
 
     public class InjectBindingProvider : IBindingProvider
     {
-        private readonly IDictionary<Type, IContainer> cache = new Dictionary<Type, IContainer>();
-        private readonly ReaderWriterLockSlim syncLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+        private readonly ConcurrentDictionary<Type, IContainer> cache = new ConcurrentDictionary<Type, IContainer>();
 
         public InjectBindingProvider()
         {
@@ -47,8 +45,14 @@ namespace AzureFunctions.Autofac
             {
                 throw new MissingAttributeException();
             }
+            
+            if (attribute.Config.IsAssignableTo<Module>() == false)
+            {
+                throw new InvalidOperationException(
+                    $"The {attribute.Config.FullName} class must inherit from {typeof(Module).FullName} and provide a default constructor.");
+            }
 
-            var container = GetContainer(method.DeclaringType, attribute);
+            var container = GetContainer(attribute.Config);
 
             //Check if there is a name property
             var injectAttribute = context.Parameter.GetCustomAttribute<InjectAttribute>();
@@ -60,47 +64,12 @@ namespace AzureFunctions.Autofac
             return Task.FromResult(binding);
         }
 
-        private IContainer GetContainer(Type functionType, DependencyInjectionConfigAttribute attribute)
+        private IContainer GetContainer(Type configModuleType)
         {
-            // Determine whether the container has already been created for the owning function class
-            // We need a lock around this just in case this ends up being resolved in parallel for the parameters of a function method
-            // Reads on the lock should far exceed writes so a ReaderWriterLockSlim is better than a lock statement
-            syncLock.EnterUpgradeableReadLock();
-
-            try
-            {
-                if (cache.ContainsKey(functionType))
-                {
-                    return cache[functionType];
-                }
-
-                syncLock.EnterWriteLock();
-
-                try
-                {
-                    if (cache.ContainsKey(functionType))
-                    {
-                        return cache[functionType];
-                    }
-
-                    var container = BuildContainer(attribute);
-
-                    cache[functionType] = container;
-
-                    return container;
-                }
-                finally
-                {
-                    syncLock.ExitWriteLock();
-                }
-            }
-            finally
-            {
-                syncLock.ExitUpgradeableReadLock();
-            }
+            return this.cache.GetOrAdd(configModuleType, BuildContainer(configModuleType));
         }
 
-        private IContainer BuildContainer(DependencyInjectionConfigAttribute attribute)
+        private IContainer BuildContainer(Type configModuleType)
         {
             var builder = new ContainerBuilder();
 
@@ -111,27 +80,7 @@ namespace AzureFunctions.Autofac
             }
 #endif
 
-            // Use this next section to support the user configuration with a constructor that takes ContainerBuilder
-            // _________________________________________________________________________________________________
-
-            //var builderConstructor = attribute.Config.GetConstructor(new[] {typeof(ContainerBuilder)});
-
-            //if (builderConstructor == null)
-            //{
-            //    throw new MissingMemberException(
-            //        $"The {attribute.Config.FullName} class must provide a constructor that has a single parameter of type {typeof(ContainerBuilder).FullName}.");
-            //}
-
-            //Activator.CreateInstance(attribute.Config, builder);
-            // _________________________________________________________________________________________________
-
-            if (attribute.Config.IsAssignableTo<Module>() == false)
-            {
-                throw new InvalidOperationException(
-                    $"The {attribute.Config.FullName} class must inherit from {typeof(Module).FullName} and provide a default constructor.");
-            }
-
-            var userModule = (Module)Activator.CreateInstance(attribute.Config);
+            var userModule = (Module)Activator.CreateInstance(configModuleType);
 
             builder.RegisterModule(userModule);
 
