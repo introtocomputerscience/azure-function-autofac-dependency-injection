@@ -18,8 +18,8 @@ namespace AzureFunctions.Autofac
     public class InjectBindingProvider : IBindingProvider
     {
         private readonly IDictionary<Type, IContainer> cache = new Dictionary<Type, IContainer>();
-        private readonly ReaderWriterLockSlim syncLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-        
+        private readonly ReaderWriterLockSlim syncLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
         public InjectBindingProvider()
         {
         }
@@ -40,7 +40,6 @@ namespace AzureFunctions.Autofac
                 throw new ArgumentNullException(nameof(context));
             }
 
-            //Get the resolver starting with method then class
             var method = (MethodInfo)context.Parameter.Member;
             var attribute = method.DeclaringType.GetCustomAttribute<DependencyInjectionConfigAttribute>();
 
@@ -50,11 +49,6 @@ namespace AzureFunctions.Autofac
             }
 
             var container = GetContainer(method.DeclaringType, attribute);
-
-            // At this point we should have created a container for the function if it hasn't already been created
-            // This provider should have access to that container and provide it to the InjectBinding instance
-            // Need to prove that this provider is not created more than once per instance of a function or call of a function
-            // This means that we don't want it to be created too often
 
             //Check if there is a name property
             var injectAttribute = context.Parameter.GetCustomAttribute<InjectAttribute>();
@@ -73,15 +67,6 @@ namespace AzureFunctions.Autofac
             // Reads on the lock should far exceed writes so a ReaderWriterLockSlim is better than a lock statement
             syncLock.EnterUpgradeableReadLock();
 
-            if (cache.ContainsKey(functionType))
-            {
-                syncLock.ExitUpgradeableReadLock();
-
-                return cache[functionType];
-            }
-
-            syncLock.EnterWriteLock();
-            
             try
             {
                 if (cache.ContainsKey(functionType))
@@ -89,15 +74,29 @@ namespace AzureFunctions.Autofac
                     return cache[functionType];
                 }
 
-                var container = BuildContainer(attribute);
+                syncLock.EnterWriteLock();
 
-                cache[functionType] = container;
+                try
+                {
+                    if (cache.ContainsKey(functionType))
+                    {
+                        return cache[functionType];
+                    }
 
-                return container;
+                    var container = BuildContainer(attribute);
+
+                    cache[functionType] = container;
+
+                    return container;
+                }
+                finally
+                {
+                    syncLock.ExitWriteLock();
+                }
             }
             finally
             {
-                syncLock.ExitWriteLock();
+                syncLock.ExitUpgradeableReadLock();
             }
         }
 
@@ -133,7 +132,7 @@ namespace AzureFunctions.Autofac
             }
 
             var userModule = (Module)Activator.CreateInstance(attribute.Config);
-            
+
             builder.RegisterModule(userModule);
 
             return builder.Build();
