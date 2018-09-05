@@ -5,27 +5,26 @@ An Autofac based implementation of Dependency Injection based on Boris Wilhelm's
 
 
 ## Usage
-In order to implement the dependency injection you have to create a class to configure DependencyInjection and add an attribute on your function class.
+In order to implement the dependency injection you have to create an Autofac Module class and add an attribute on your function class.
 
 ### Configuration
-Create a class and add a constructor that takes 1 string argument. The string argument will automatically be passed and runtime and simply needs to be passed through to the initialize method. In the constructor call the DependencyInjection.Initialize method. Perform the registrations as you normally would with Autofac.
+Create a class that inherits from Autofac.Module and override the Load member to build an Autofac container.
 ```c#
-    public class DIConfig
+    using Autofac;
+
+    public class DIConfig : Module
     {
-        public DIConfig(string functionName)
+        protected override void Load(ContainerBuilder builder)
         {
-            DependencyInjection.Initialize(builder =>
-            {
-                //Implicity registration
-                builder.RegisterType<Sample>().As<ISample>();
-                //Explicit registration
-                builder.Register<Example>(c => new Example(c.Resolve<ISample>())).As<IExample>();
-                //Registration by autofac module
-                builder.RegisterModule(new TestModule());
-                //Named Instances are supported
-                builder.RegisterType<Thing1>().Named<IThing>("OptionA");
-                builder.RegisterType<Thing2>().Named<IThing>("OptionB");
-            }, functionName);
+            //Implicity registration
+            builder.RegisterType<Sample>().As<ISample>();
+            //Explicit registration
+            builder.Register<Example>(c => new Example(c.Resolve<ISample>())).As<IExample>();
+            //Registration by autofac module
+            builder.RegisterModule(new TestModule());
+            //Named Instances are supported
+            builder.RegisterType<Thing1>().Named<IThing>("OptionA");
+            builder.RegisterType<Thing2>().Named<IThing>("OptionB");
         }
     }
 ```
@@ -92,39 +91,6 @@ In some cases you may wish to have different dependency injection configs for di
         {
             log.Info("C# HTTP trigger function processed a request.");
             return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
-        }
-    }
-```
-
-## Verifying dependency injection configuration
-Dependency injection is a great tool for creating unit tests. But with manual configuration of the dependency injection, there is a risk of mis-configuration that will not show up in unit tests. For this purpose, there is the `DependencyInjection.VerifyConfiguration` method.
-
-It is not recommended to call `VerifyConfiguration` unless done so in a test-scenario.
-
-`VerifyConfiguration` verifies the following rules:
-1. That an `InjectAttribute` is preceeded by a `DependencyInjectionConfigAttribute`.
-2. That the configuration can be instantiated.
-3. That all injected dependencies in the given type can be resolved with the defined configuration.
-4. Optionally that no redundant configurations exist, i.e. a `DependencyInjectionConfigAttribute` with no corresponding `InjectAttribute`.
-### Simple example of verification
-Below is a very simple example of verifying the dependency injection configuration for a specific class:
-```c#
-    DependencyInjection.VerifyConfiguration(typeof(MyCustomClassThatUsesDependencyInjection));
-```
-### Ignoring redundant configurations
-If you don't want to verify rule 4, pass in `false` as the second parameter to `VerifyConfiguration`:
-```c#
-    DependencyInjection.VerifyConfiguration(typeof(MyCustomClassThatUsesDependencyInjection), false);
-```
-### Example unit test to verify an entire project/assembly
-For instance, you can use it in a unit test to verify that all classes in your project has dependency injection set up correctly:
-```c#
-    [TestMethod]
-    public void TestDependencyInjectionConfigurationInAssembly() {
-        var assembly = typeof(SomeClassInYouProject).Assembly;
-        var types = assembly.GetTypes();
-        foreach (var type in types) {
-            DependencyInjection.VerifyConfiguration(type);
         }
     }
 ```

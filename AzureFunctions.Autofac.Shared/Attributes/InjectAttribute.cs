@@ -7,9 +7,9 @@ namespace AzureFunctions.Autofac
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
     public class InjectAttribute : Attribute
     {
-        public String Name { get; }
+        public string Name { get; }
 
-        public InjectAttribute(String name = null)
+        public InjectAttribute(string name = null)
         {
             Name = name;
         }

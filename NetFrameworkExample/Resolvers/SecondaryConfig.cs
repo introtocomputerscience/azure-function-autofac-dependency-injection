@@ -1,17 +1,13 @@
 ﻿using Autofac;
 using AutofacDIExample.Modules;
-using AzureFunctions.Autofac.Configuration;
 
 namespace AutofacDIExample.Resolvers
 {
-    public class SecondaryConfig
+    public class SecondaryConfig : Module
     {
-        public SecondaryConfig(string functionName)
+        protected override void Load(ContainerBuilder builder)
         {
-            DependencyInjection.Initialize(builder =>
-            {
-                builder.RegisterModule(new SecondaryTestModule());
-            }, functionName);
+            builder.RegisterModule(new SecondaryTestModule());
         }
     }
 }

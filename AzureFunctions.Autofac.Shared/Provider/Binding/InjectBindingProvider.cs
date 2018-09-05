@@ -1,14 +1,13 @@
-﻿#if !NET46
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Autofac.Extensions.DependencyInjection;
-#endif
 using Autofac;
 
 namespace AzureFunctions.Autofac
 {
     using System;
-    using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Reflection;
+    using System.Threading;
     using System.Threading.Tasks;
     using AzureFunctions.Autofac.Exceptions;
     using Microsoft.Azure.WebJobs.Host.Bindings;
@@ -16,20 +15,14 @@ namespace AzureFunctions.Autofac
 
     public class InjectBindingProvider : IBindingProvider
     {
-        private readonly ConcurrentDictionary<Type, IContainer> cache = new ConcurrentDictionary<Type, IContainer>();
-
-        public InjectBindingProvider()
-        {
-        }
-
-#if !NET46
+        private readonly IDictionary<Type, IContainer> cache = new Dictionary<Type, IContainer>();
+        private readonly ReaderWriterLockSlim syncLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         private readonly IServiceCollection services;
 
         public InjectBindingProvider(IServiceCollection services)
         {
             this.services = services ?? throw new ArgumentNullException(nameof(services));
         }
-#endif
 
         public Task<IBinding> TryCreateAsync(BindingProviderContext context)
         {
@@ -48,8 +41,8 @@ namespace AzureFunctions.Autofac
             
             if (attribute.Config.IsAssignableTo<Module>() == false)
             {
-                throw new InvalidOperationException(
-                    $"The {attribute.Config.FullName} class must inherit from {typeof(Module).FullName} and provide a default constructor.");
+                throw new InitializationException(
+                    $"The {attribute.Config.FullName} class must inherit from {typeof(Module).FullName} and provide a default constructor. See https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/README.md for documentation and examples.");
             }
 
             var container = GetContainer(attribute.Config);
@@ -63,22 +56,55 @@ namespace AzureFunctions.Autofac
 
             return Task.FromResult(binding);
         }
-
+        
         private IContainer GetContainer(Type configModuleType)
         {
-            return this.cache.GetOrAdd(configModuleType, BuildContainer(configModuleType));
+            // Determine whether the container has already been created for the owning function class
+            // We need a lock around this just in case this ends up being resolved in parallel for the parameters of a function method
+            // Reads on the lock should far exceed writes so a ReaderWriterLockSlim is better than a lock statement
+            syncLock.EnterUpgradeableReadLock();
+
+            try
+            {
+                if (cache.ContainsKey(configModuleType))
+                {
+                    return cache[configModuleType];
+                }
+
+                syncLock.EnterWriteLock();
+
+                try
+                {
+                    if (cache.ContainsKey(configModuleType))
+                    {
+                        return cache[configModuleType];
+                    }
+
+                    var container = BuildContainer(configModuleType);
+
+                    cache[configModuleType] = container;
+
+                    return container;
+                }
+                finally
+                {
+                    syncLock.ExitWriteLock();
+                }
+            }
+            finally
+            {
+                syncLock.ExitUpgradeableReadLock();
+            }
         }
 
         private IContainer BuildContainer(Type configModuleType)
         {
             var builder = new ContainerBuilder();
-
-#if !NET46
+            
             if (services != null)
             {
                 builder.Populate(services);
             }
-#endif
 
             var userModule = (Module)Activator.CreateInstance(configModuleType);
 

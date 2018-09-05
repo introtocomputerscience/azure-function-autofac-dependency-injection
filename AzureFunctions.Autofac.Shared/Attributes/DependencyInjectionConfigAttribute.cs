@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AzureFunctions.Autofac
+﻿namespace AzureFunctions.Autofac
 {
+    using System;
+
     [AttributeUsage(AttributeTargets.Class)]
     public class DependencyInjectionConfigAttribute : Attribute
     {

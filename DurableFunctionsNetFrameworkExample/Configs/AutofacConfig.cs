@@ -1,20 +1,16 @@
 ﻿using Autofac;
-using AzureFunctions.Autofac.Configuration;
 using DurableFunctionsNetFrameworkExample.Interfaces;
 using DurableFunctionsNetFrameworkExample.Models;
 
 namespace DurableFunctionsNetFrameworkExample.Configs
 {
-    public class AutofacConfig
+    public class AutofacConfig : Module
     {
-        public AutofacConfig(string functionName)
+        protected override void Load(ContainerBuilder builder)
         {
-            DependencyInjection.Initialize(builder =>
-            {
-                builder.RegisterType<Greeter>().As<IGreeter>();
-                builder.RegisterType<Goodbyer>().Named<IGoodbyer>("Primary");
-                builder.RegisterType<AlternateGoodbyer>().Named<IGoodbyer>("Secondary");
-            }, functionName);
+            builder.RegisterType<Greeter>().As<IGreeter>();
+            builder.RegisterType<Goodbyer>().Named<IGoodbyer>("Primary");
+            builder.RegisterType<AlternateGoodbyer>().Named<IGoodbyer>("Secondary");
         }
     }
 }
