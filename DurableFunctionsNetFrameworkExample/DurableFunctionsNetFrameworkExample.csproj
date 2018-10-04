@@ -4,8 +4,8 @@
     <AzureFunctionsVersion>v1</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="1.6.0" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.19" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="1.6.2" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.22" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AzureFunctions.Autofac.NetFramework\AzureFunctions.Autofac.NetFramework.csproj" />
