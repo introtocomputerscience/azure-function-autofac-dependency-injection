@@ -23,8 +23,8 @@ Create a class and add a constructor that takes 1 string argument. The string ar
                 //Registration by autofac module
                 builder.RegisterModule(new TestModule());
                 //Named Instances are supported
-                builder.RegisterType<Thing1>().Named<IThing>("OptionA");
-                builder.RegisterType<Thing2>().Named<IThing>("OptionB");
+                builder.RegisterType<Thing1>().As<IThing>().Named<IThing>("OptionA");
+                builder.RegisterType<Thing2>().As<IThing>().Named<IThing>("OptionB");
             }, functionName);
         }
     }
