@@ -1,20 +1,23 @@
-﻿using Autofac;
-using Microsoft.Azure.WebJobs.Host.Config;
+﻿using Microsoft.Azure.WebJobs.Host.Config;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AzureFunctions.Autofac.Provider.Config
 {
     public class InjectExtensionConfigProvider : IExtensionConfigProvider
     {
         private readonly InjectBindingProvider bindingProvider;
-        public InjectExtensionConfigProvider()
+        
+        public InjectExtensionConfigProvider(IServiceCollection services)
         {
-            this.bindingProvider = new InjectBindingProvider();
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            this.bindingProvider = new InjectBindingProvider(services);
         }
+        
         public void Initialize(ExtensionConfigContext context)
         {
             context.AddBindingRule<InjectAttribute>().Bind(this.bindingProvider);

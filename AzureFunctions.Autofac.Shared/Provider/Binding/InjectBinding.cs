@@ -1,8 +1,6 @@
 ﻿using Autofac;
-using AzureFunctions.Autofac.Configuration;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Protocols;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -10,28 +8,43 @@ namespace AzureFunctions.Autofac
 {
     internal class InjectBinding : IBinding
     {
-        private Type type;
-        private string name;
-        private string className;
+        private readonly Type type;
+        private readonly string name;
+        private readonly IContainer container;
+
         public bool FromAttribute => true;
-        public InjectBinding(Type type, String name, String className)
+
+        public InjectBinding(IContainer container, Type type, string name)
         {
+            this.container = container;
             this.type = type;
             this.name = name;
-            this.className = className;
         }
 
         public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) =>
             Task.FromResult((IValueProvider)new InjectValueProvider(value));
 
-        public async Task<IValueProvider> BindAsync(BindingContext context)
+        public Task<IValueProvider> BindAsync(BindingContext context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            dynamic value = DependencyInjection.Resolve(type, name, this.className);
-            return await BindAsync(value, context.ValueContext);
+
+            object value;
+            
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                value = container.Resolve(type);
+            }
+            else
+            {
+                value = container.ResolveNamed(name, type);
+            }
+
+            // async/await not required here because there is no continuation
+            // Simply returning the task result is better for perf because a state machine for the member is not compiled into the binary
+            return BindAsync(value, context.ValueContext);
         }
 
         public ParameterDescriptor ToParameterDescriptor() => new ParameterDescriptor();

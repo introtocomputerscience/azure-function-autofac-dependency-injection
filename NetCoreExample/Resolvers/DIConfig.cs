@@ -1,20 +1,13 @@
-﻿using Autofac;
-using AutofacDIExample.Modules;
-using AzureFunctions.Autofac;
-using AzureFunctions.Autofac.Configuration;
-using Microsoft.Azure.WebJobs.Host.Bindings;
-using System;
-
-namespace AutofacDIExample.Resolvers
+﻿namespace AutofacDIExample.Resolvers
 {
-    public class DIConfig
+    using Autofac;
+    using AutofacDIExample.Modules;
+
+    public class DIConfig : Module
     {
-        public DIConfig(string functionName)
+        protected override void Load(ContainerBuilder builder)
         {
-            DependencyInjection.Initialize(builder =>
-            {
-                builder.RegisterModule(new TestModule());
-            }, functionName);
+            builder.RegisterModule(new TestModule());
         }
     }
 }
