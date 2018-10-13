@@ -14,11 +14,11 @@
     <repository type="GitHub" url="https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection" />
     <dependencies>
       <group targetFramework=".NETFramework4.6">
-        <dependency id="Autofac" version="[4.2.1]" exclude="Build,Analyzers" />
+        <dependency id="Autofac" version="4.2.1" exclude="Build,Analyzers" />
         <dependency id="Microsoft.Azure.WebJobs" version="2.2.0" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Autofac" version="[4.2.1]" exclude="Build,Analyzers" />
+        <dependency id="Autofac" version="4.2.1" exclude="Build,Analyzers" />
         <dependency id="Microsoft.Azure.WebJobs" version="3.0.0-rc1" exclude="Build,Analyzers" />
       </group>
     </dependencies>
