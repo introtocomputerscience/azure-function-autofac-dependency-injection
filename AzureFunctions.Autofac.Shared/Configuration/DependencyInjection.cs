@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using AzureFunctions.Autofac.Exceptions;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -8,31 +9,33 @@ namespace AzureFunctions.Autofac.Configuration
 {
     public static class DependencyInjection
     {
-        private static Dictionary<string, IContainer> containers = new Dictionary<string, IContainer>();
-        public static void Initialize(Action<ContainerBuilder> cfg, string functionName)
+        private static ConcurrentDictionary<string, IContainer> containers = new ConcurrentDictionary<string, IContainer>();
+        private static ConcurrentDictionary<Guid, ILifetimeScope> instanceContainers = new ConcurrentDictionary<Guid, ILifetimeScope>();
+        public static void Initialize(Action<ContainerBuilder> cfg, string functionClassName)
         {
-            if (!containers.ContainsKey(functionName))
+            containers.GetOrAdd(functionClassName, str =>
             {
                 ContainerBuilder builder = new ContainerBuilder();
                 cfg(builder);
-                var container = builder.Build();
-                containers.Add(functionName, container);
-            }
+                return builder.Build();
+            });
         }
 
-        public static object Resolve(Type type, string name, string functionName)
+        public static object Resolve(Type type, string name, string functionClassName, Guid functionInstanceId)
         {
-            if (containers.ContainsKey(functionName))
+            if (containers.ContainsKey(functionClassName))
             {
-                var container = containers[functionName];
+                var container = containers[functionClassName];
+                var scope = instanceContainers.GetOrAdd(functionInstanceId, id => container.BeginLifetimeScope());
+
                 object resolved = null;
                 if (string.IsNullOrWhiteSpace(name))
                 {
-                    resolved = container.Resolve(type);
+                    resolved = scope.Resolve(type);
                 }
                 else
                 {
-                    resolved = container.ResolveNamed(name, type);
+                    resolved = scope.ResolveNamed(name, type);
                 }
                 return resolved;
             }
@@ -40,6 +43,14 @@ namespace AzureFunctions.Autofac.Configuration
             {
                 throw new InitializationException("DependencyInjection.Initialize must be called before dependencies can be resolved.");
             }
+        }
+
+        public static void RemoveScope(Guid functionInstanceId)
+        {
+            if (instanceContainers.TryRemove(functionInstanceId, out ILifetimeScope scope))
+            {
+                scope.Dispose();
+            };
         }
 
         /// <summary>
@@ -77,7 +88,8 @@ namespace AzureFunctions.Autofac.Configuration
                     injectAttrFound = true;
                     var functionName = $"testfunction-{Guid.NewGuid()}";
                     Activator.CreateInstance(configAttr.Config, functionName);
-                    Resolve(param.ParameterType, injectAttr.Name, functionName);
+                    var functionInstanceId = Guid.NewGuid();
+                    Resolve(param.ParameterType, injectAttr.Name, functionName, functionInstanceId);
                 }
             }
 
