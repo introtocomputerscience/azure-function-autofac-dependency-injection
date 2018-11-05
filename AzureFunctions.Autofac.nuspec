@@ -9,7 +9,15 @@
     <licenseUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</projectUrl>
     <description>Autofac Implementation of DI for Azure Functions</description>
-    <releaseNotes>Updated to work with the breaking changes introduced in v2 functions</releaseNotes>
+    <releaseNotes>
+      Adds per-function-invocation resolution of dependencies. Dependencies can be specified as follows:
+
+      SingleInstance() - singleton scoped to the class implementing the function
+      InstancePerLifetimeScope() - scoped to the function instance
+      otherwise - transient scope
+
+      Updated Microsoft.Data.OData to 5.8.4 in NET Framework project to resolve security issues
+    </releaseNotes>
     <copyright>2017</copyright>
     <repository type="GitHub" url="https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection" />
     <dependencies>
