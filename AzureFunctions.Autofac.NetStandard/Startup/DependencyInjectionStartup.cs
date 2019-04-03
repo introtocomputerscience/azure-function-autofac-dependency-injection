@@ -13,7 +13,7 @@ namespace AzureFunctions.Autofac.Startup
     {
         public void Configure(IWebJobsBuilder builder)
         {
-            builder.AddExtension(new InjectExtensionConfigProvider());
+            builder.AddExtension<InjectExtensionConfigProvider>();
 
             builder.Services.AddSingleton<IFunctionFilter, ScopeFilter>();
         }
