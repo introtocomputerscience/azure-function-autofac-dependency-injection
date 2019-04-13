@@ -8,11 +8,11 @@ An Autofac based implementation of Dependency Injection based on Boris Wilhelm's
 In order to implement the dependency injection you have to create a class to configure DependencyInjection and add an attribute on your function class.
 
 ### Configuration
-Create a class and add a constructor that takes 1 string argument. The string argument will automatically be passed and runtime and simply needs to be passed through to the initialize method. In the constructor call the DependencyInjection.Initialize method. Perform the registrations as you normally would with Autofac.
+Create a class and add a constructor that takes 1 string argument, (or if you are targetting netstandard 2.0, you can specify a second parameter for the base directory). The string argument will automatically be passed and runtime and simply needs to be passed through to the initialize method. In the constructor call the DependencyInjection.Initialize method. Perform the registrations as you normally would with Autofac.
 ```c#
     public class DIConfig
     {
-        public DIConfig(string functionName)
+        public DIConfig(string functionName, string baseDirectory)
         {
             DependencyInjection.Initialize(builder =>
             {
