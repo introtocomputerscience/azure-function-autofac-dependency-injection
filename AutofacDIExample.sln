@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27019.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28705.295
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions.Autofac.Shared", "AzureFunctions.Autofac.Shared\AzureFunctions.Autofac.Shared.csproj", "{1807691A-3F7E-4774-9B1D-E6B4A8FBFB3F}"
 EndProject
