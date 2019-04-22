@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>AzureFunctions.Autofac</id>
-    <version>3.0.6</version>
+    <version>3.0.7</version>
     <authors>CJ van der Smissen</authors>
     <owners>CJ van der Smissen</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,13 +10,7 @@
     <projectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</projectUrl>
     <description>Autofac Implementation of DI for Azure Functions</description>
     <releaseNotes>
-      Adds per-function-invocation resolution of dependencies. Dependencies can be specified as follows:
-
-      SingleInstance() - singleton scoped to the class implementing the function
-      InstancePerLifetimeScope() - scoped to the function instance
-      otherwise - transient scope
-
-      Updated Microsoft.Data.OData to 5.8.4 in NET Framework project to resolve security issues
+      Provide functions base directory to InjectionConfig
     </releaseNotes>
     <copyright>2017</copyright>
     <repository type="GitHub" url="https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection" />

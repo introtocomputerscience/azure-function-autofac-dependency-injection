@@ -8,7 +8,38 @@ An Autofac based implementation of Dependency Injection based on Boris Wilhelm's
 In order to implement the dependency injection you have to create a class to configure DependencyInjection and add an attribute on your function class.
 
 ### Configuration
-Create a class and add a constructor that takes 1 string argument, (or if you are targetting netstandard 2.0, you can specify a second parameter for the base directory). The string argument will automatically be passed and runtime and simply needs to be passed through to the initialize method. In the constructor call the DependencyInjection.Initialize method. Perform the registrations as you normally would with Autofac.
+
+The configuration class is used to setup dependency injestion. Within the constructor of the class DependencyInjection.Initialize must be invoked. Registrations are then according to standard Autofac procedures.  
+
+In both .NET Framework and .NET Core a required functionName parameter is automatically injected for you but you must specify it as a constructor parameter.  
+
+In .NET Core you have an optional baseDirectory parameter that can be used for loading external app configs. If you wish to use this functionality then you must specify this as a constructor parameter and it will be injected for you.
+
+#### Functions V1 Example (.NET Framework)
+
+```c#
+    public class DIConfig
+    {
+        public DIConfig(string functionName)
+        {
+            DependencyInjection.Initialize(builder =>
+            {
+                //Implicity registration
+                builder.RegisterType<Sample>().As<ISample>();
+                //Explicit registration
+                builder.Register<Example>(c => new Example(c.Resolve<ISample>())).As<IExample>();
+                //Registration by autofac module
+                builder.RegisterModule(new TestModule());
+                //Named Instances are supported
+                builder.RegisterType<Thing1>().Named<IThing>("OptionA");
+                builder.RegisterType<Thing2>().Named<IThing>("OptionB");
+            }, functionName);
+        }
+    }
+```
+
+#### Functions V2 Example (.NET Core)
+
 ```c#
     public class DIConfig
     {
@@ -37,11 +68,11 @@ Once you have created your config class you need to annotate your function class
     {
         [FunctionName("GreeterFunction")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
-                                              TraceWriter log, 
+                                              ILogger log, 
                                               [Inject]IGreeter greeter, 
                                               [Inject]IGoodbyer goodbye)
         {
-            log.Info("C# HTTP trigger function processed a request.");
+            log.LogInformation("C# HTTP trigger function processed a request.");
             return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
         }
     }
@@ -54,12 +85,12 @@ Support has been added to use named dependencies. Simple add a name parameter to
     {
         [FunctionName("GreeterFunction")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
-                                              TraceWriter log, 
+                                              ILogger log, 
                                               [Inject]IGreeter greeter, 
                                               [Inject("Main")]IGoodbyer goodbye, 
                                               [Inject("Secondary")]IGoodbyer alternateGoodbye)
         {
-            log.Info("C# HTTP trigger function processed a request.");
+            log.LogInformation("C# HTTP trigger function processed a request.");
             return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()} or {alternateGoodbye.Goodbye()}");
         }
     }
@@ -72,11 +103,11 @@ In some cases you may wish to have different dependency injection configs for di
     {
         [FunctionName("GreeterFunction")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
-                                              TraceWriter log, 
+                                              ILogger log, 
                                               [Inject]IGreeter greeter, 
                                               [Inject]IGoodbyer goodbye)
         {
-            log.Info("C# HTTP trigger function processed a request.");
+            log.LogInformation("C# HTTP trigger function processed a request.");
             return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
         }
     }
@@ -86,11 +117,11 @@ In some cases you may wish to have different dependency injection configs for di
     {
         [FunctionName("SecondaryGreeterFunction")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
-                                              TraceWriter log, 
+                                              ILogger log, 
                                               [Inject]IGreeter greeter, 
                                               [Inject]IGoodbyer goodbye)
         {
-            log.Info("C# HTTP trigger function processed a request.");
+            log.LogInformation("C# HTTP trigger function processed a request.");
             return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
         }
     }
