@@ -2,25 +2,25 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>AzureFunctions.Autofac</id>
-    <version>3.0.7</version>
-    <authors>CJ van der Smissen</authors>
-    <owners>CJ van der Smissen</owners>
+    <version>3.1.137</version>
+    <authors>CJ van der Smissen, Royal Jay</authors>
+    <owners>This fork/package owned by Royal Jay</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</projectUrl>
+    <licenseUrl>https://github.com/Royal-Jay/azure-function-autofac-dependency-injection/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Royal-Jay/azure-function-autofac-dependency-injection</projectUrl>
     <description>Autofac Implementation of DI for Azure Functions</description>
     <releaseNotes>
       Provide functions base directory to InjectionConfig
     </releaseNotes>
-    <copyright>2017</copyright>
-    <repository type="GitHub" url="https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection" />
+    <copyright>2020</copyright>
+    <repository type="GitHub" url="https://github.com/Royal-Jay/azure-function-autofac-dependency-injection" />
     <dependencies>
       <group targetFramework=".NETFramework4.6">
-        <dependency id="Autofac" version="4.8.1" exclude="Build,Analyzers" />
+        <dependency id="Autofac" version="4.9.4" exclude="Build,Analyzers" />
         <dependency id="Microsoft.Azure.WebJobs" version="2.2.0" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Autofac" version="4.8.1" exclude="Build,Analyzers" />
+        <dependency id="Autofac" version="4.9.4" exclude="Build,Analyzers" />
         <dependency id="Microsoft.Azure.WebJobs" version="3.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
