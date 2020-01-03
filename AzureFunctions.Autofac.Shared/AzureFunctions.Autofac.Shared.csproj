@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>3.0.3</Version>
+    <Version>3.0.6</Version>
     <Authors>CJ van der Smissen</Authors>
     <Company />
     <Product />
@@ -14,12 +14,11 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageReleaseNotes>Added feature to verify the dependency injection configuration for a given type.</PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/LICENSE</PackageLicenseUrl>
-    <AssemblyVersion>3.0.3.0</AssemblyVersion>
+    <AssemblyVersion>3.0.6.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
-    <Folder Include="Provider\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +31,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.0-rc1" />
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
   </ItemGroup>
   
 </Project>

@@ -30,7 +30,7 @@ namespace AzureFunctions.Autofac
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            dynamic value = DependencyInjection.Resolve(type, name, this.className);
+            dynamic value = DependencyInjection.Resolve(type, name, this.className, context.FunctionInstanceId);
             return await BindAsync(value, context.ValueContext);
         }
 

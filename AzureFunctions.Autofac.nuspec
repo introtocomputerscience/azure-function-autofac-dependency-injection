@@ -2,14 +2,16 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>AzureFunctions.Autofac</id>
-    <version>3.0.5</version>
+    <version>3.0.7</version>
     <authors>CJ van der Smissen</authors>
     <owners>CJ van der Smissen</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</projectUrl>
     <description>Autofac Implementation of DI for Azure Functions</description>
-    <releaseNotes>Updated to work with the breaking changes introduced in v2 functions</releaseNotes>
+    <releaseNotes>
+      Provide functions base directory to InjectionConfig
+    </releaseNotes>
     <copyright>2017</copyright>
     <repository type="GitHub" url="https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection" />
     <dependencies>
@@ -19,7 +21,7 @@
       </group>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Autofac" version="4.8.1" exclude="Build,Analyzers" />
-        <dependency id="Microsoft.Azure.WebJobs" version="3.0.0-rc1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Azure.WebJobs" version="3.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

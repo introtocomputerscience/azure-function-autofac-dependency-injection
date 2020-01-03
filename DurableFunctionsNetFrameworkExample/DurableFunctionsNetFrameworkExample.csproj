@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <AzureFunctionsVersion>v1</AzureFunctionsVersion>
@@ -9,6 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AzureFunctions.Autofac.NetFramework\AzureFunctions.Autofac.NetFramework.csproj" />
+    <ProjectReference Include="..\AzureFunctions.Autofac.Shared\AzureFunctions.Autofac.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
