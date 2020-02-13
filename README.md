@@ -11,9 +11,9 @@ In order to implement the dependency injection you have to create a class to con
 
 The configuration class is used to setup dependency injestion. Within the constructor of the class DependencyInjection.Initialize must be invoked. Registrations are then according to standard Autofac procedures.  
 
-In both .NET Framework and .NET Core a required functionName parameter is automatically injected for you but you must specify it as a constructor parameter.  
+In both .NET Framework and .NET Core a required functionName parameter is automatically injected for you but you must specify it as a constructor parameter. You can also use the optional ILoggerFactory parameter, to register it into the container, and therefore allow Autofac to inject ILogger<> into your services.
 
-In .NET Core you have an optional baseDirectory parameter that can be used for loading external app configs. If you wish to use this functionality then you must specify this as a constructor parameter and it will be injected for you.
+In .NET Core you have another optional baseDirectory parameter that can be used for loading external app configs. If you wish to use this functionality then you must specify this as a constructor parameter and it will be injected for you.
 
 #### Functions V1 Example (.NET Framework)
 
@@ -43,7 +43,7 @@ In .NET Core you have an optional baseDirectory parameter that can be used for l
 ```c#
     public class DIConfig
     {
-        public DIConfig(string functionName, string baseDirectory)
+        public DIConfig(string functionName, string baseDirectory, ILoggerFactory factory)
         {
             DependencyInjection.Initialize(builder =>
             {
@@ -56,6 +56,8 @@ In .NET Core you have an optional baseDirectory parameter that can be used for l
                 //Named Instances are supported
                 builder.RegisterType<Thing1>().Named<IThing>("OptionA");
                 builder.RegisterType<Thing2>().Named<IThing>("OptionB");
+                // Configure Autofac to provide ILogger<> into constructors
+                builder.RegisterLoggerFactory(factory);
             }, functionName);
         }
     }
