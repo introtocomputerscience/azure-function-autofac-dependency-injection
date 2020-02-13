@@ -5,7 +5,7 @@ using AutofacDIExample.Resolvers;
 using AzureFunctions.Autofac;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 
 namespace NetCoreExample.Functions
 {
@@ -14,10 +14,11 @@ namespace NetCoreExample.Functions
     {
         [FunctionName("LoggerFunction")]
         public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request,
-            TraceWriter log,
+            ILogger log,
             [Inject]ILogWriter writer)
         {
-            log.Info("C# HTTP trigger function processed a request.");
+            log.LogInformation("C# HTTP trigger function processed a request.");
+            writer.Log();
             return request.CreateResponse(HttpStatusCode.OK, "Autofac managed to inject a ILogger<>");
         }
     }
