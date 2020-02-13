@@ -16,26 +16,26 @@ namespace AzureFunctions.Autofac.Provider.Config
 {
     public class InjectExtensionConfigProvider : IExtensionConfigProvider
     {
-        private readonly InjectBindingProvider bindingProvider;
+        private InjectBindingProvider _bindingProvider;
 
 #if NET46
-        public InjectExtensionConfigProvider()
-        {
-            this.bindingProvider = new InjectBindingProvider();
-        }
+        public InjectExtensionConfigProvider() { }
 #endif
 
 #if NETSTANDARD2_0
         public InjectExtensionConfigProvider(IOptions<ExecutionContextOptions> options, ILoggerFactory loggerFactory)
         {
             var appDirectory = options.Value.AppDirectory;
-            this.bindingProvider = new InjectBindingProvider(appDirectory, loggerFactory);
+            this._bindingProvider = new InjectBindingProvider(appDirectory, loggerFactory);
         }
 #endif
 
         public void Initialize(ExtensionConfigContext context)
         {
-            context.AddBindingRule<InjectAttribute>().Bind(this.bindingProvider);
+#if NET46
+            this._bindingProvider = new InjectBindingProvider(null,context.Config.LoggerFactory);
+#endif
+            context.AddBindingRule<InjectAttribute>().Bind(this._bindingProvider);
         }
     }
 }

@@ -38,6 +38,7 @@ namespace AzureFunctions.Autofac
 
             //Initialize DependencyInjection
             var functionAndAppDirectoryAndLoggerFactoryConstructor = attribute.Config.GetConstructor(new[] { typeof(string), typeof(string), typeof(ILoggerFactory) });
+            var functionAndAppLoggerFactoryConstructor = attribute.Config.GetConstructor(new[] { typeof(string), typeof(ILoggerFactory) });
             var functionAndAppDirectoryConstructor = attribute.Config.GetConstructor(new[] { typeof(string), typeof(string) });
 
             if (functionAndAppDirectoryAndLoggerFactoryConstructor != null)
@@ -47,6 +48,10 @@ namespace AzureFunctions.Autofac
             else if (functionAndAppDirectoryConstructor != null)
             {
                 Activator.CreateInstance(attribute.Config, functionName, _appDirectory);
+            }
+            else if (functionAndAppLoggerFactoryConstructor != null)
+            {
+                Activator.CreateInstance(attribute.Config, functionName, _loggerFactory);
             }
             else
             {
