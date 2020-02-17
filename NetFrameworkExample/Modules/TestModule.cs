@@ -10,6 +10,7 @@ namespace AutofacDIExample.Modules
             builder.RegisterType<Greeter>().As<IGreeter>();
             builder.RegisterType<Goodbyer>().Named<IGoodbyer>("Main");
             builder.RegisterType<AlternateGoodbyer>().Named<IGoodbyer>("Secondary");
+            builder.RegisterType<LogWriter>().As<ILogWriter>();
 
         }
     }

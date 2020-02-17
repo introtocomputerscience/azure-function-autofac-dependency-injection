@@ -6,7 +6,7 @@ using Microsoft.Azure.WebJobs.Host;
 using System.Net;
 using System.Net.Http;
 
-namespace AutofacDIExample.GreeterFunction
+namespace AutofacDIExample.Functions
 {
     [DependencyInjectionConfig(typeof(DIConfig))]
     public class GreeterFunction
