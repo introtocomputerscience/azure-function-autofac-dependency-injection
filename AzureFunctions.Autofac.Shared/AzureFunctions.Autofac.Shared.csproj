@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>3.0.6</Version>
+    <Version>4.0.0-alpha</Version>
     <Authors>CJ van der Smissen</Authors>
     <Company />
     <Product />
@@ -12,9 +12,10 @@
     <PackageProjectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</PackageProjectUrl>
     <RepositoryUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageReleaseNotes>Added feature to verify the dependency injection configuration for a given type.</PackageReleaseNotes>
+    <PackageReleaseNotes>Removing restriction of autofac as Azure Functions is no longer limiting this.</PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/LICENSE</PackageLicenseUrl>
-    <AssemblyVersion>3.0.6.0</AssemblyVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <FileVersion>4.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="[4.6.2]" />
+    <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
   </ItemGroup>
 
