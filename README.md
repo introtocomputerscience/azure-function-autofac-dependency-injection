@@ -87,14 +87,9 @@ You will need to add a using statement in the Dependency Injection Config for `A
 builder.RegisterLoggerFactory(factory);
 ```
 
-You will also need to define an [ILogWriter](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#create-logs) implementation such as the example [LogWriter](https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/NetCoreExample/Models/LogWriter.cs)
+It will now be possible for Autofac to inject into your classes an ILogger<> that can be used to output to the console or configured location.
 
-Once it has been created in the Initialize function you need to register it:
-```
-builder.RegisterType<LogWriter>().As<ILogWriter>();
-```
-
-It will now be possible for Autofac to inject into your classes an ILogWriter that can be used to output to the console or configured location.
+An example of this is in the [Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#create-logs) as well as in this repo in the [LogWriter](https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/NetCoreExample/Models/LogWriter.cs)
 
 Note that you must also update the *host.json* file to contain a Logging Configuration. See the [Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#configure-logging) for more details.
 ### Using Named Dependencies
