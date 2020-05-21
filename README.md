@@ -79,6 +79,24 @@ Once you have created your config class you need to annotate your function class
         }
     }
 ```
+### Logging with ILoggerFactory
+With Azure Functions v2 it is now possible to provide an optional ILoggerFactory when setting up the Dependency Injection Config. 
+
+You will need to add a using statement in the Dependency Injection Config for `AzureFunctions.Autofac.Shared.Extensions` and add the following line in your Initialize function:
+```
+builder.RegisterLoggerFactory(factory);
+```
+
+You will also need to define an [ILogWriter](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#create-logs) implementation such as the example [LogWriter](https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/NetCoreExample/Models/LogWriter.cs)
+
+Once it has been created in the Initialize function you need to register it:
+```
+builder.RegisterType<LogWriter>().As<ILogWriter>();
+```
+
+It will now be possible for Autofac to inject into your classes an ILogWriter that can be used to output to the console or configured location.
+
+Note that you must also update the *host.json* file to contain a Logging Configuration. See the [Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#configure-logging) for more details.
 ### Using Named Dependencies
 Support has been added to use named dependencies. Simple add a name parameter to the Inject attribute to specify which instance to use.
 ```c#
