@@ -11,14 +11,13 @@ namespace AzureFunctions.Autofac.Configuration
     {
         private static ConcurrentDictionary<string, IContainer> containers = new ConcurrentDictionary<string, IContainer>();
         private static ConcurrentDictionary<Guid, ILifetimeScope> instanceContainers = new ConcurrentDictionary<Guid, ILifetimeScope>();
-        public static void Initialize(Action<ContainerBuilder> cfg, string functionClassName)
+        public static void Initialize(Action<ContainerBuilder> cfg, string functionClassName, Action<IContainer> containerAction = null)
         {
-            containers.GetOrAdd(functionClassName, str =>
-            {
-                ContainerBuilder builder = new ContainerBuilder();
-                cfg(builder);
-                return builder.Build();
-            });
+            ContainerBuilder builder = new ContainerBuilder();
+            cfg(builder);
+            var container = builder.Build();
+            containerAction?.Invoke(container);
+            containers.GetOrAdd(functionClassName, str => container);
         }
 
         public static object Resolve(Type type, string name, string functionClassName, Guid functionInstanceId)
