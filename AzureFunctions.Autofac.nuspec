@@ -6,7 +6,7 @@
     <authors>CJ van der Smissen</authors>
     <owners>CJ van der Smissen</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</projectUrl>
     <description>Autofac Implementation of DI for Azure Functions</description>
     <releaseNotes>
