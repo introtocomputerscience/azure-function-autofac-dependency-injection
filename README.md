@@ -38,7 +38,7 @@ In .NET Core you have another optional baseDirectory parameter that can be used 
     }
 ```
 
-#### Functions V2 Example (.NET Core)
+#### Functions V2/V3 Example (.NET Core)
 
 ```c#
     public class DIConfig
@@ -140,6 +140,28 @@ In some cases you may wish to have different dependency injection configs for di
             return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
         }
     }
+```
+### Post-Build Container Setup
+If you wish to perform actions on the DI container after it has been built you can pass an Action<IContainer> as the last parameter of the DependencyInjection.Initialize function.
+```c#
+public DIConfig(string functionName)
+{
+    var tracer = new DotDiagnosticTracer();
+    tracer.OperationCompleted += (sender, args) =>
+    {
+        // Writing the DOT trace to a file will let you render
+        // it to a graph with Graphviz later, but this is
+        // NOT A GOOD COPY/PASTE EXAMPLE. You'll want to do
+        // things in an async fashion with good error handling.
+        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.dot");
+        using var file = new StreamWriter(path);
+        file.WriteLine(args.TraceContent);
+    };
+    DependencyInjection.Initialize(builder =>
+    {
+        builder.RegisterType<Greeter>().As<IGreeter>();
+    }, functionName, c => c.SubscribeToDiagnostics(tracer));
+}
 ```
 
 ## Verifying dependency injection configuration

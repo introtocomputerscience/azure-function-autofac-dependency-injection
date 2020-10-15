@@ -2,15 +2,15 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>AzureFunctions.Autofac</id>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <authors>CJ van der Smissen</authors>
     <owners>CJ van der Smissen</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</projectUrl>
     <description>Autofac Implementation of DI for Azure Functions</description>
     <releaseNotes>
-      Removing restriction of autofac as Azure Functions is no longer limiting this.
+      Added support for passing an action to perform on a container
     </releaseNotes>
     <copyright>2017</copyright>
     <repository type="GitHub" url="https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection" />
