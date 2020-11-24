@@ -92,6 +92,7 @@ It will now be possible for Autofac to inject into your classes an ILogger<> tha
 An example of this is in the [Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#create-logs) as well as in this repo in the [LogWriter](https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection/blob/master/NetCoreExample/Models/LogWriter.cs)
 
 Note that you must also update the *host.json* file to contain a Logging Configuration. See the [Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#configure-logging) for more details.
+
 ### Using Named Dependencies
 Support has been added to use named dependencies. Simple add a name parameter to the Inject attribute to specify which instance to use.
 ```c#
@@ -110,6 +111,7 @@ Support has been added to use named dependencies. Simple add a name parameter to
         }
     }
 ```
+
 ### Multiple Dependency Injection Configurations
 In some cases you may wish to have different dependency injection configs for different classes. This is supported by simply annotating the other class with a different dependency injection config.
 ```c#
@@ -166,6 +168,8 @@ public class DIConfig
         }
     }
 ```
+[See Example](DOTGraphTracerExample/Functions/ExampleFunction.cs)
+
 ### Container Caching
 By default containers are cached using the function name and a new lifetime scope of the container is created for each function invocation. This means that if you register a type as single instance then it will be provided to each function with the same name even though they are in different lifetime scopes. In some cases this behavior is not desired and as such you can disable caching during dependency injection initialization by passing `enableCaching` as `false`
 ```c#
@@ -180,7 +184,7 @@ public class DIConfig
         }
     }
 ```
-See [Caching Example](caching-example/ExampleFunctions.cs)
+[See Example](caching-example/ExampleFunctions.cs)
 
 ## Verifying dependency injection configuration
 Dependency injection is a great tool for creating unit tests. But with manual configuration of the dependency injection, there is a risk of mis-configuration that will not show up in unit tests. For this purpose, there is the `DependencyInjection.VerifyConfiguration` method.
@@ -214,3 +218,4 @@ For instance, you can use it in a unit test to verify that all classes in your p
         }
     }
 ```
+[See Example](AzureFunctions.Autofac.NetStandard.Tests/DependencyInjectionVerificationTests.cs)
