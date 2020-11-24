@@ -185,6 +185,7 @@ public class DIConfig
     }
 ```
 [See Enabled Caching Example](caching-example/Config/CachingConfig.cs)
+
 [See Disabled Caching Example](caching-example/Config/NonCachingConfig.cs)
 
 ## Verifying dependency injection configuration
