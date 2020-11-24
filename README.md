@@ -144,25 +144,43 @@ In some cases you may wish to have different dependency injection configs for di
 ### Post-Build Container Setup
 If you wish to perform actions on the DI container after it has been built you can pass an Action<IContainer> as the last parameter of the DependencyInjection.Initialize function.
 ```c#
-public DIConfig(string functionName)
-{
-    var tracer = new DotDiagnosticTracer();
-    tracer.OperationCompleted += (sender, args) =>
+public class DIConfig
     {
-        // Writing the DOT trace to a file will let you render
-        // it to a graph with Graphviz later, but this is
-        // NOT A GOOD COPY/PASTE EXAMPLE. You'll want to do
-        // things in an async fashion with good error handling.
-        var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.dot");
-        using var file = new StreamWriter(path);
-        file.WriteLine(args.TraceContent);
-    };
-    DependencyInjection.Initialize(builder =>
-    {
-        builder.RegisterType<Greeter>().As<IGreeter>();
-    }, functionName, c => c.SubscribeToDiagnostics(tracer));
-}
+        public DIConfig(string functionName)
+        {
+            var tracer = new DotDiagnosticTracer();
+            tracer.OperationCompleted += (sender, args) =>
+            {
+                // Writing the DOT trace to a file will let you render
+                // it to a graph with Graphviz later, but this is
+                // NOT A GOOD COPY/PASTE EXAMPLE. You'll want to do
+                // things in an async fashion with good error handling.
+                var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.dot");
+                using var file = new StreamWriter(path);
+                file.WriteLine(args.TraceContent);
+            };
+            DependencyInjection.Initialize(builder =>
+            {
+                builder.RegisterType<Greeter>().As<IGreeter>();
+            }, functionName, c => c.SubscribeToDiagnostics(tracer));
+        }
+    }
 ```
+### Container Caching
+By default containers are cached using the function name and a new lifetime scope of the container is created for each function invocation. This means that if you register a type as single instance then it will be provided to each function with the same name even though they are in different lifetime scopes. In some cases this behavior is not desired and as such you can disable caching during dependency injection initialization by passing `enableCaching` as `false`
+```c#
+public class DIConfig
+    {
+        public DIConfig(string functionName, string baseDirectory, ILoggerFactory factory)
+        {
+            DependencyInjection.Initialize(builder =>
+            {
+                builder.RegisterType<Sample>().As<ISample>().SingleInstance();
+            }, functionName, enableCaching: false);
+        }
+    }
+```
+See [Caching Example](caching-example/ExampleFunctions.cs)
 
 ## Verifying dependency injection configuration
 Dependency injection is a great tool for creating unit tests. But with manual configuration of the dependency injection, there is a risk of mis-configuration that will not show up in unit tests. For this purpose, there is the `DependencyInjection.VerifyConfiguration` method.

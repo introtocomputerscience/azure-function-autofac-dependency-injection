@@ -1,6 +1,7 @@
 ﻿using AzureFunctions.Autofac.Configuration;
 using Microsoft.Azure.WebJobs.Host;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;

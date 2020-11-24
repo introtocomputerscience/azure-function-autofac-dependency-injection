@@ -5,14 +5,14 @@ using caching_example.Services;
 
 namespace caching_example.Config
 {
-    public class CachingConfig
+    public class NonCachingConfig
     {
-        public CachingConfig(string functionName)
+        public NonCachingConfig(string functionName)
         {
             DependencyInjection.Initialize(builder =>
             {
                 builder.RegisterType<CacheTester>().As<ICacheTester>().SingleInstance();
-            }, functionName);
+            }, functionName, enableCaching: false);
         }
     }
 }
