@@ -168,7 +168,7 @@ public class DIConfig
         }
     }
 ```
-[See Example](DOTGraphTracerExample/Functions/ExampleFunction.cs)
+[See Example](DOTGraphTracerExample/Configs/DIConfig.cs)
 
 ### Container Caching
 By default containers are cached using the function name and a new lifetime scope of the container is created for each function invocation. This means that if you register a type as single instance then it will be provided to each function with the same name even though they are in different lifetime scopes. In some cases this behavior is not desired and as such you can disable caching during dependency injection initialization by passing `enableCaching` as `false`
@@ -184,7 +184,8 @@ public class DIConfig
         }
     }
 ```
-[See Example](caching-example/ExampleFunctions.cs)
+[See Enabled Caching Example](caching-example/Config/CachingConfig.cs)
+[See Disabled Caching Example](caching-example/Config/NonCachingConfig.cs)
 
 ## Verifying dependency injection configuration
 Dependency injection is a great tool for creating unit tests. But with manual configuration of the dependency injection, there is a risk of mis-configuration that will not show up in unit tests. For this purpose, there is the `DependencyInjection.VerifyConfiguration` method.
