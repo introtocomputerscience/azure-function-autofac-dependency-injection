@@ -262,7 +262,7 @@ For instance, you can use it in a unit test to verify that all classes in your p
 
 # Buy me a beer?
 
-I love programming and all but as both a day job and a hobby it can get tiring. I mean I could have just been drinking a beer or playing some games. If this project helped you advance your own work they why not consider buying me a beer...
+I love programming and all but as both a day job and a hobby it can get tiring. I mean I could have just been drinking a beer or playing some games. If this project helped you advance your own work then why not consider buying me a beer...
 
 * [Buy me a nice beer](https://www.paypal.me/cjvds/5.00?locale.x=en_US)
 * [Buy me a good beer](https://www.paypal.me/cjvds/2.50?locale.x=en_US)
