@@ -80,8 +80,8 @@ Once you have created your config class you need to annotate your function class
     }
 ```
 
-#### Extra attribute Functions V1
-An extra attribute is necessary for Functions V1 to properly release the objects created by the autofac container.
+#### Extra attribute Functions V1 (.NET Framework)
+An extra attribute, ScopeFilterAttribute, is necessary for Functions V1 to properly release the objects created by the autofac container.
 ```c#
     [DependencyInjectionConfig(typeof(DIConfig))]
     [ScopeFilter]
