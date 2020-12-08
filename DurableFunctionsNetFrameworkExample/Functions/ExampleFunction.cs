@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace DurableFunctionsNetFrameworkExample.Functions
 {
     [DependencyInjectionConfig(typeof(AutofacConfig))]
+    [ScopeFilter]
     public static class ExampleFunction
     {
 
