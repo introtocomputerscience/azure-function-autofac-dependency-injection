@@ -11,6 +11,7 @@
     <description>Autofac Implementation of DI for Azure Functions</description>
     <releaseNotes>
       New attribute for cleaning up ILifetimeScope for Azure Functions V1
+      Added support for disabling container reuse between function invocations (beyond lifetime support)
     </releaseNotes>
     <copyright>2017</copyright>
     <repository type="GitHub" url="https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection" />
