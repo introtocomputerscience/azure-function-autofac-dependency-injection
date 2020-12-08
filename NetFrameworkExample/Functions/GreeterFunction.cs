@@ -9,6 +9,7 @@ using System.Net.Http;
 namespace AutofacDIExample.Functions
 {
     [DependencyInjectionConfig(typeof(DIConfig))]
+    [ScopeFilter]
     public class GreeterFunction
     {
         [FunctionName("GreeterFunction")]
@@ -24,6 +25,7 @@ namespace AutofacDIExample.Functions
     }
 
     [DependencyInjectionConfig(typeof(SecondaryConfig))]
+    [ScopeFilter]
     public class SecondaryGreeterFunction
     {
         [FunctionName("SecondaryGreeterFunction")]

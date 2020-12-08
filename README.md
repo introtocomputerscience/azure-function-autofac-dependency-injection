@@ -1,4 +1,5 @@
 # Autofac Dependency Injection in Azure Functions
+
 An Autofac based implementation of Dependency Injection based on Boris Wilhelm's [azure-function-dependency-injection](https://github.com/BorisWilhelms/azure-function-dependency-injection) and Scott Holden's [WebJobs.ContextResolver](https://github.com/ScottHolden/WebJobs.ContextResolver) available on NuGet as [AzureFunctions.Autofac](https://www.nuget.org/packages/AzureFunctions.Autofac)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/d6k6g4gbhulqneef?svg=true)](https://ci.appveyor.com/project/vandersmissenc/azure-function-autofac-dependency-injection)
@@ -79,6 +80,27 @@ Once you have created your config class you need to annotate your function class
 
 ```c#
     [DependencyInjectionConfig(typeof(DIConfig))]
+    public class GreeterFunction
+    {
+        [FunctionName("GreeterFunction")]
+        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
+                                              ILogger log, 
+                                              [Inject]IGreeter greeter, 
+                                              [Inject]IGoodbyer goodbye)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+            return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
+        }
+    }
+```
+
+### Extra attribute Functions V1 (.NET Framework)
+
+An extra attribute, ScopeFilterAttribute, is necessary for Functions V1 to properly release the objects created by the autofac container.
+
+```c#
+    [DependencyInjectionConfig(typeof(DIConfig))]
+    [ScopeFilter]
     public class GreeterFunction
     {
         [FunctionName("GreeterFunction")]
