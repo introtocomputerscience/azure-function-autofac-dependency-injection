@@ -79,6 +79,26 @@ Once you have created your config class you need to annotate your function class
         }
     }
 ```
+
+#### Extra attribute Functions V1
+An extra attribute is necessary for Functions V1 to properly release the objects created by the autofac container.
+```c#
+    [DependencyInjectionConfig(typeof(DIConfig))]
+    [ScopeFilter]
+    public class GreeterFunction
+    {
+        [FunctionName("GreeterFunction")]
+        public static HttpResponseMessage Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequestMessage request, 
+                                              ILogger log, 
+                                              [Inject]IGreeter greeter, 
+                                              [Inject]IGoodbyer goodbye)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+            return request.CreateResponse(HttpStatusCode.OK, $"{greeter.Greet()} {goodbye.Goodbye()}");
+        }
+    }
+```
+
 ### Logging with ILoggerFactory
 With Azure Functions v2 it is now possible to provide an optional ILoggerFactory when setting up the Dependency Injection Config. 
 
