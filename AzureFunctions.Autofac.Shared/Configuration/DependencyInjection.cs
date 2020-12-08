@@ -11,20 +11,47 @@ namespace AzureFunctions.Autofac.Configuration
     {
         private static ConcurrentDictionary<string, IContainer> containers = new ConcurrentDictionary<string, IContainer>();
         private static ConcurrentDictionary<Guid, ILifetimeScope> instanceContainers = new ConcurrentDictionary<Guid, ILifetimeScope>();
-        public static void Initialize(Action<ContainerBuilder> cfg, string functionClassName, Action<IContainer> containerAction = null)
+
+        private static ConcurrentDictionary<string, bool> _enableCaching = new ConcurrentDictionary<string, bool>();
+        private static ConcurrentDictionary<string, Func<IContainer>> nonCachedContainerBuilder = new ConcurrentDictionary<string, Func<IContainer>>();
+
+        private static IContainer SetupContainerBuilder(Action<ContainerBuilder> cfg, Action<IContainer> containerAction = null)
         {
             ContainerBuilder builder = new ContainerBuilder();
             cfg(builder);
             var container = builder.Build();
             containerAction?.Invoke(container);
-            containers.GetOrAdd(functionClassName, str => container);
+            return container;
+        }
+
+        public static void Initialize(Action<ContainerBuilder> cfg, string functionClassName, Action<IContainer> containerAction = null, bool enableCaching = true)
+        {
+            _enableCaching[functionClassName] = enableCaching;
+            if (_enableCaching[functionClassName])
+            {
+                var container = SetupContainerBuilder(cfg, containerAction);
+                containers.GetOrAdd(functionClassName, str => container);
+            }
+            else
+            {
+                nonCachedContainerBuilder.GetOrAdd(functionClassName, () => SetupContainerBuilder(cfg, containerAction));
+            }
         }
 
         public static object Resolve(Type type, string name, string functionClassName, Guid functionInstanceId)
         {
-            if (containers.ContainsKey(functionClassName))
+            if (containers.ContainsKey(functionClassName) || (!_enableCaching[functionClassName] && nonCachedContainerBuilder.ContainsKey(functionClassName)))
             {
-                var container = containers[functionClassName];
+                IContainer container;
+                if (_enableCaching[functionClassName])
+                {
+                    container = containers[functionClassName];
+                }
+                else
+                {
+                    container = nonCachedContainerBuilder[functionClassName].Invoke();
+                }
+
                 var scope = instanceContainers.GetOrAdd(functionInstanceId, id => container.BeginLifetimeScope());
 
                 object resolved = null;
