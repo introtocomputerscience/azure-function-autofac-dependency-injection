@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using AzureFunctions.Autofac.Exceptions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -89,7 +90,7 @@ namespace AzureFunctions.Autofac.Configuration
         /// </summary>
         /// <param name="type">The type to verify.</param>
         /// <param name="verifyUnnecessaryConfig">If true, verify that no configuration exists unless there is at least one injected parameter. Defaults to true.</param>
-        public static void VerifyConfiguration(Type type, bool verifyUnnecessaryConfig = true)
+        public static void VerifyConfiguration(Type type, bool verifyUnnecessaryConfig = true, string appDirectory = null, ILoggerFactory loggerFactory = null)
         {
             var configAttr = type.GetCustomAttribute<DependencyInjectionConfigAttribute>();
             var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static);
@@ -113,7 +114,30 @@ namespace AzureFunctions.Autofac.Configuration
 
                     injectAttrFound = true;
                     var functionName = $"testfunction-{Guid.NewGuid()}";
-                    Activator.CreateInstance(configAttr.Config, functionName);
+
+
+                    //Initialize DependencyInjection
+                    var functionAndAppDirectoryAndLoggerFactoryConstructor = configAttr.Config.GetConstructor(new[] { typeof(string), typeof(string), typeof(ILoggerFactory) });
+                    var functionAndAppLoggerFactoryConstructor = configAttr.Config.GetConstructor(new[] { typeof(string), typeof(ILoggerFactory) });
+                    var functionAndAppDirectoryConstructor = configAttr.Config.GetConstructor(new[] { typeof(string), typeof(string) });
+
+                    if (functionAndAppDirectoryAndLoggerFactoryConstructor != null)
+                    {
+                        Activator.CreateInstance(configAttr.Config, functionName, appDirectory, loggerFactory);
+                    }
+                    else if (functionAndAppDirectoryConstructor != null)
+                    {
+                        Activator.CreateInstance(configAttr.Config, functionName, appDirectory);
+                    }
+                    else if (functionAndAppLoggerFactoryConstructor != null)
+                    {
+                        Activator.CreateInstance(configAttr.Config, functionName, loggerFactory);
+                    }
+                    else
+                    {
+                        Activator.CreateInstance(configAttr.Config, functionName);
+                    }
+
                     var functionInstanceId = Guid.NewGuid();
                     Resolve(param.ParameterType, injectAttr.Name, functionName, functionInstanceId);
                 }

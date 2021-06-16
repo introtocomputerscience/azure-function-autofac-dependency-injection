@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>AzureFunctions.Autofac</id>
-    <version>4.0.2</version>
+    <version>4.0.3</version>
     <authors>CJ van der Smissen</authors>
     <owners>CJ van der Smissen</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,8 +10,10 @@
     <projectUrl>https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection</projectUrl>
     <description>Autofac Implementation of DI for Azure Functions</description>
     <releaseNotes>
-      New attribute for cleaning up ILifetimeScope for Azure Functions V1
-      Added support for disabling container reuse between function invocations (beyond lifetime support)
+      Fixed VerifyConfiguration to instantiate DependencyInjectionConfigs that use any combination of supported parameters instead of just function name.
+      Added NetCoreExample.Tests project demonstrating the fix for VerifyConfiguration.
+      Added FunctionsV3Example project.
+      Resolved security issues in NetFramework by upgrading System.Net.Http.
     </releaseNotes>
     <copyright>2017</copyright>
     <repository type="GitHub" url="https://github.com/introtocomputerscience/azure-function-autofac-dependency-injection" />
